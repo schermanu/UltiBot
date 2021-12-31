@@ -10,24 +10,21 @@ import constants as CST
 # from bot_commands import load_commands, BotCommands
 from discord.ext import commands
 
-
-
 bot = TheBot()
 
 wednesdayPollRoutine = \
     poll.TrainingPollRoutine("wednesday_training_poll",
                              "Wednesday training poll", bot,
-                             poll.TrainingPollEmbedBuilder(2, 0x2A3AFF))
+                             poll.TrainingPollEmbedBuilder(2, 0x2A3AFF), "me")
 
 saturdayPollRoutine = \
     poll.TrainingPollRoutine("saturday_training_poll",
                              "Saturday training poll", bot,
-                             poll.TrainingPollEmbedBuilder(5, 0xFF5733))
+                             poll.TrainingPollEmbedBuilder(5, 0xFF5733), "sa")
 
 bot.add_routine(wednesdayPollRoutine)
 bot.add_routine(saturdayPollRoutine)
 bot.run(CST.BOT_TOKEN)
-
 
 # def main():
 #     pass

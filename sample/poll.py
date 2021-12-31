@@ -38,7 +38,7 @@ class TrainingPollEmbedBuilder:
 # Routine that sends a poll for a training on a given channel, on a given day of the week.
 class TrainingPollRoutine:
 
-    def __init__(self, name, displayName, bot, embedBuilder):
+    def __init__(self, name, displayName, bot, embedBuilder, cmdKeyWord):
         self.name = name
         self.displayName = displayName
         self.bot = bot
@@ -47,6 +47,7 @@ class TrainingPollRoutine:
         self.executionDayNum = None
         self.channelId = None
         self.lastExecutionDate = None
+        self.cmdKeyWord = cmdKeyWord
 
     # Enable this routine and set the execution's day number.
     def enable(self, executionDayNum, channelId):
