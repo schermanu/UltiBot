@@ -90,17 +90,17 @@ class TrainingPollRoutine:
     def log(self, msg):
         print(f"\t[routine \"{self.displayName}\"] {msg}")
 
-    def save_state(self, state):
+    def save_routines_state(self, state):
 
         state[self.name] = \
             {
-                'isEnabled': "" if self.isEnabled is None else self.isEnabled,
+                'isEnabled': "" if self.isEnabled is None else self.isEnabled,# isEnabled a forcément une valeur puisqu'il est initialisé a False
                 'execDayNum': "" if self.executionDayNum is None else self.executionDayNum,
                 'channelId': "" if self.channelId is None else self.channelId,
                 'lastExecDate': "" if self.lastExecutionDate is None else self.lastExecutionDate.isoformat(),
             }
 
-    def load_state(self, state):
+    def load_routines_state(self, state):
 
         if state.has_section(self.name):
             routineConfig = state[self.name]

@@ -7,7 +7,10 @@
 from sample.theBot import TheBot
 from sample import poll
 import constants as CST
-from bot_commands import load_commands
+# from bot_commands import load_commands, BotCommands
+from discord.ext import commands
+
+
 
 bot = TheBot()
 
@@ -20,8 +23,6 @@ saturdayPollRoutine = \
     poll.TrainingPollRoutine("saturday_training_poll",
                              "Saturday training poll", bot,
                              poll.TrainingPollEmbedBuilder(5, 0xFF5733))
-
-load_commands(bot, wednesdayPollRoutine, saturdayPollRoutine)
 
 bot.add_routine(wednesdayPollRoutine)
 bot.add_routine(saturdayPollRoutine)

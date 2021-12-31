@@ -1,21 +1,47 @@
 import asyncio
 import datetime
+
+import discord
 from discord.ext import commands
 
 from sample import poll
 import constants as CST
+import io
 
 
-def load_commands(bot, wednesdayPollRoutine, saturdayPollRoutine):
+# "name" parameter of a command is what need to be typed in discord to call it
 
-    # remplacer None par "0"
+def load_commands(bot: discord.Bot):
+    # wednesdayPollRoutine, saturdayPollRoutine = None, None
+
+    @bot.command(
+        name='getlastmessage')
+    async def client_getlastmessage(ctx, ID):
+        """Get the last message of a text channel."""
+        channel = bot.get_channel(int(ID))
+        if channel is None:
+            await ctx.send('Could not find that channel.')
+            return
+        # NOTE: get_channel can return a TextChannel, VoiceChannel,
+        # or CategoryChannel. You may want to add a check to make sure
+        # the ID is for text channels only
+
+        message = await channel.fetch_message(
+            channel.last_message_id)
+        # NOTE: channel.last_message_id could return None; needs a check
+        for i in range(20):
+            await ctx.send(
+                f'Last message in {channel.name} sent by {message.author.name}:\n'
+                + message.content
+            )
+        await ctx.message.delete()
+
     @bot.command()
     async def set_poll_time(ctx: commands.Context, hoursStr, minutesStr=None, secondsStr=None):
         hours = int(hoursStr)
         minutes = 0 if minutesStr is None else int(minutesStr)
         seconds = 0 if secondsStr is None else int(secondsStr)
         triggerTime = datetime.time(hour=hours, minute=minutes, second=seconds)
-
         bot.set_routines_trigger_time(triggerTime)
         bot.save_state()
 
@@ -26,6 +52,12 @@ def load_commands(bot, wednesdayPollRoutine, saturdayPollRoutine):
 
     @bot.command()
     async def start_poll(ctx: commands.Context, trainingDayName, executionDayName, asTestStr=None):
+        for routine in bot.routines:
+            if routine.name == "saturday_training_poll":
+                saturdayPollRoutine = routine
+            elif routine.name == "wednesday_training_poll":
+                wednesdayPollRoutine = routine
+
         dayNameNums = {'lu': 0, 'ma': 1, 'me': 2, 'je': 3, 've': 4, 'sa': 5, 'di': 6}
 
         if trainingDayName not in dayNameNums.keys():
@@ -47,7 +79,7 @@ def load_commands(bot, wednesdayPollRoutine, saturdayPollRoutine):
             routine = saturdayPollRoutine
 
         routine.enable(executionDayNum, channelId)
-        bot.save_state()
+        await bot.save_state()
 
         await ctx.send(
             f'"{routine.displayName}" started{asTestMsg}. '
@@ -57,6 +89,12 @@ def load_commands(bot, wednesdayPollRoutine, saturdayPollRoutine):
 
     @bot.command()
     async def stop_poll(ctx: commands.Context, trainingDayName):
+        for routine in bot.routines:
+            if routine.name == "saturday_training_poll":
+                saturdayPollRoutine = routine
+            elif routine.name == "wednesday_training_poll":
+                wednesdayPollRoutine = routine
+
         if trainingDayName == 'me':
             routine = wednesdayPollRoutine
         elif trainingDayName == 'sa':
@@ -92,7 +130,6 @@ def load_commands(bot, wednesdayPollRoutine, saturdayPollRoutine):
 
         await ctx.send(msg)
 
-
     @bot.command()
     async def react(ctx: commands.Context, msgId=1):
         await ctx.message.delete()
@@ -106,13 +143,33 @@ def load_commands(bot, wednesdayPollRoutine, saturdayPollRoutine):
                 # await msg.clear_reaction(reaction.emoji)
                 await msg.add_reaction(reaction.emoji)
 
-    @bot.command(name="clear threads", description="supprimer les fils du channel")
+    @bot.command(name="clearThreads", description="supprimer les fils du channel")
     async def clearThreads(ctx: commands.Context):
         for thread in ctx.channel.threads:
             await thread.delete()
+        await ctx.message.delete()
 
     @bot.command(name="test", descrtiption="commande de test")
     async def test(ctx: commands.Context):
+
         pass
+        # async for message in ctx.channel.history(author=ctx.guild.get_member(913556318768463893)):
+        #     print(message.created_at, message.author.name, message.content)
+        # member = ctx.message.author
+        # msg = discord.utils.get(await ctx.history(limit=100).flatten(), author=member)
+        # await ctx.send(msg.author)
+        # botMember = await ctx.channel.fetch_members(913556318768463893)
 
+    @bot.command(name="copyMsg", descrtiption="copie le message ")
+    async def copyMsg(ctx: commands.Context, msgId):
+        msg = await ctx.fetch_message(msgId)
+        await ctx.send(msg.content)
 
+    # @bot.event
+    # async def on_ready():
+    #     print(f"nom utilisateur {bot.user.name}")
+
+# class BotCommands(commands.Bot):
+#     def __init__(self, bot: discord.Client):
+#         super().__init__(command_prefix=commands.when_mentioned_or('?'))
+#         load_commands(self, bot)
