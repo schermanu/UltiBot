@@ -112,7 +112,7 @@ class TheBot(commands.Bot):
         for routine in self.routines:
             await routine.execute()
 
-        self.save_state()
+        await self.save_state()
 
     def log(self, msg):
         print(f"[bot] {msg}")

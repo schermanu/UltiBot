@@ -43,7 +43,7 @@ def load_commands(bot: discord.Bot):
         seconds = 0 if secondsStr is None else int(secondsStr)
         triggerTime = datetime.time(hour=hours, minute=minutes, second=seconds)
         bot.set_routines_trigger_time(triggerTime)
-        bot.save_state()
+        await bot.save_state()
 
         await ctx.send(f"Polls sending time set to {triggerTime}.")
 
@@ -52,11 +52,6 @@ def load_commands(bot: discord.Bot):
 
     @bot.command()
     async def start_poll(ctx: commands.Context, trainingDayName, executionDayName, asTestStr=None):
-        for routine in bot.routines:
-            if routine.name == "saturday_training_poll":
-                saturdayPollRoutine = routine
-            elif routine.name == "wednesday_training_poll":
-                wednesdayPollRoutine = routine
 
         dayNameNums = {'lu': 0, 'ma': 1, 'me': 2, 'je': 3, 've': 4, 'sa': 5, 'di': 6}
 
@@ -72,13 +67,12 @@ def load_commands(bot: discord.Bot):
         asTest = False if asTestStr is None else (asTestStr.lower() == "test")
         channelId = CST.TEST_CHANNEL_ID if asTest else CST.TRAINING_POLLS_CHANNEL_ID
         asTestMsg = " for testing" if asTest else ""
-        routine = None
-        if trainingDayName == 'me':
-            routine = wednesdayPollRoutine
-        elif trainingDayName == 'sa':
-            routine = saturdayPollRoutine
 
-        routine.enable(executionDayNum, channelId)
+        for routine in bot.routines:
+            if routine.cmdKeyWord == trainingDayName:
+                routine.enable(executionDayNum, channelId)
+                continue
+
         await bot.save_state()
 
         await ctx.send(
@@ -89,24 +83,24 @@ def load_commands(bot: discord.Bot):
 
     @bot.command()
     async def stop_poll(ctx: commands.Context, trainingDayName):
-        for routine in bot.routines:
-            if routine.name == "saturday_training_poll":
-                saturdayPollRoutine = routine
-            elif routine.name == "wednesday_training_poll":
-                wednesdayPollRoutine = routine
 
-        if trainingDayName == 'me':
-            routine = wednesdayPollRoutine
-        elif trainingDayName == 'sa':
-            routine = saturdayPollRoutine
-        else:
+        dayNameNums = {'lu': 0, 'ma': 1, 'me': 2, 'je': 3, 've': 4, 'sa': 5, 'di': 6}
+
+        if trainingDayName not in dayNameNums.keys():
             await ctx.send("The name provided for the training day is unknown.")
             return
+        foundRoutine = False
+        for routine in bot.routines:
+            if routine.cmdKeyWord == trainingDayName:
+                foundRoutine = True
+                print(foundRoutine)
+                routine.disable()
+                await ctx.send(f'"{routine.displayName}" stopped.')
+                await bot.save_state()
+                continue
+        if not foundRoutine:
+            await ctx.send("No running routine for the training day provided.")
 
-        routine.disable()
-        bot.save_state()
-
-        await ctx.send(f'"{routine.displayName}" stopped.')
 
     @bot.command()
     async def status(ctx: commands.Context):
