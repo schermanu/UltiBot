@@ -1,5 +1,7 @@
 # from backports import zoneinfo
-import pytz
+import datetime
+
+import arrow
 # Constantes utilisées par le bot, pour éviter de les écrire dans le code
 # une variable par ligne, sans commentaires sur la ligne
 
@@ -24,6 +26,9 @@ STATE_FILE_PATH = "../state.ini"
 # exists and should always be less than 86400.
 MAX_SLEEP_DURATION = 3600
 # Time zone to use when receiving dates from the user, or displaying them to him.
-USER_TIMEZONE = pytz.timezone('Europe/Paris')
+
+from dateutil import tz
+USER_TIMEZONE = tz.gettz('Europe/Paris')
 # zoneinfo.ZoneInfo("Europe/Paris")
+
 

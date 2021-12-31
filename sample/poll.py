@@ -140,7 +140,7 @@ def format_time_delta(delta: datetime.timedelta):
 # from the given reference date. If none is provided, today is used.
 def format_weekday_num(weekDayNum, format='EEEE', refDate=None):
     nextTargetDay = get_date_from_weekday(weekDayNum, refDate)
-    return babel.dates.format_date(nextTargetDay, format=format)
+    return babel.dates.format_date(nextTargetDay, format=format, locale='en')
 
 
 def format_datetime(dateTime, placeholder='never', format='%d/%m/%Y, %H:%M:%S'):
