@@ -9,40 +9,43 @@ def __init__():
 
 
 # Builder of an embed that will serve as a poll for a given training.
-class TrainingPollEmbedBuilder:
+class TrainingPollMsgBuilder:
 
-    def __init__(self, trainingDayNum, color):
+    def __init__(self, trainingDayNum, description, reactions, color, threadMsgStr):
         # Number of the week day on which the training occurs.
         self.trainingDayNum = trainingDayNum
         # Color to display with the message.
         self.color = color
+        self.description = description
+        self.reactions = reactions
+        self.threadMsgStr = threadMsgStr
 
-    def build(self):
+    async def build(self, routine):
         # Calculate the date of the next training, for which to send the poll.
         trainingDate = get_date_from_weekday(self.trainingDayNum)
         trainingDateStr = \
             babel.dates.format_date(trainingDate, format='EEEE d MMMM', locale='fr_FR').capitalize()
 
-        return \
-            discord.Embed(
-                title=f"! {trainingDateStr} !",
-                description=
-                "Préviens de ta présence à l'entraînement : \n"
-                "✅ si tu viens\n"
-                "☑️ seulement si on est assez pour des matchs\n"
-                "❌ si tu viens pas\n"
-                "❔ si tu sais pas encore",
-                color=self.color)
+        embed = discord.Embed(title=f"! {trainingDateStr} !", description=self.description, color=self.color)
+
+        msg = await routine.bot.get_channel(routine.channelId).send(embed=embed)
+        for reaction in self.reactions:
+            await msg.add_reaction(reaction)
+
+        f = await msg.create_thread(name=trainingDateStr, auto_archive_duration=CST.MAX_THREAD_ARCHIVING_DURATION)
+        await f.send(self.threadMsgStr)
+
+
 
 
 # Routine that sends a poll for a training on a given channel, on a given day of the week.
 class TrainingPollRoutine:
 
-    def __init__(self, name, displayName, bot, embedBuilder, cmdKeyWord):
+    def __init__(self, name, displayName, bot, trainingPollMsgBuilder, cmdKeyWord):
         self.name = name
         self.displayName = displayName
         self.bot = bot
-        self.embedBuilder = embedBuilder
+        self.trainingPollMsgBuilder = trainingPollMsgBuilder
         self.isEnabled = False
         self.executionDayNum = None
         self.channelId = None
@@ -67,26 +70,29 @@ class TrainingPollRoutine:
     # If this routine is enabled, send a poll on the set channel,
     # if today is the set execution day.
     async def execute(self):
-
-        channel = self.bot.get_channel(self.channelId)
+        self.log(f"{self.displayName} triggerd")
         today = datetime.datetime.now(tz=CST.USER_TIMEZONE)
-        alreadyExecutedToday = \
-            False if self.lastExecutionDate is None \
-            else (self.lastExecutionDate.date() == today.date())
+        # uncomment if use alreadyExecutedToday
+        # alreadyExecutedToday = \
+        #     False if self.lastExecutionDate is None \
+        #     else (self.lastExecutionDate.date() == today.date())
+        #
 
-        self.log(f"isEnabled = {self.isEnabled}")
-        self.log(f"executionDayNum = {self.executionDayNum}")
-        self.log(f"alreadyExecutedToday = {alreadyExecutedToday}")
+        # self.log(f"isEnabled = {self.isEnabled}")
+        # self.log(f"executionDayNum = {self.executionDayNum}")
+        # self.log(f"alreadyExecutedToday = {alreadyExecutedToday}")
 
-        if self.isEnabled and today.weekday() == self.executionDayNum \
-                and not alreadyExecutedToday:
-            msg = await channel.send(embed=self.embedBuilder.build())
-            await msg.add_reaction('✅')
-            await msg.add_reaction('☑️')
-            await msg.add_reaction('❌')
-            await msg.add_reaction('❔')
-
+        if self.isEnabled and today.weekday() == self.executionDayNum:
+            # comment if use alreadyExecutedToday
+            await self.trainingPollMsgBuilder.build(self)
             self.lastExecutionDate = datetime.datetime.now(tz=CST.USER_TIMEZONE)
+
+            # uncomment if use alreadyExecutedToday
+            # if not alreadyExecutedToday:
+            #     await self.trainingPollMsgBuilder.build(self)
+            #     self.lastExecutionDate = datetime.datetime.now(tz=CST.USER_TIMEZONE)
+            # else:
+            #     self.log(f"alreadyExecutedToday = {alreadyExecutedToday}")
 
     def log(self, msg):
         print(f"\t[routine \"{self.displayName}\"] {msg}")

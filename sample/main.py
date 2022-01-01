@@ -10,20 +10,32 @@ import constants as CST
 # from bot_commands import load_commands, BotCommands
 from discord.ext import commands
 
-bot = TheBot()
+bot = theBot.TheBot()
+
+embedDescription = "Préviens de ta présence à l'entraînement : \n" \
+                   "✅ si tu viens\n" \
+                   "☑️que si on est assez pour des matchs\n" \
+                   "❌ si tu viens pas\n" \
+                   "❔ si tu sais pas encore"
+reactions = ["✅", "☑", "❌", "❔"]
+threadMsgStr = f"<@&{CST.LICENCIE_ROLE_ID}>\n**Fil de discussion dédié à cet entraînement**"
 
 wednesdayPollRoutine = \
     poll.TrainingPollRoutine("wednesday_training_poll",
                              "Wednesday training poll", bot,
-                             poll.TrainingPollEmbedBuilder(2, 0x2A3AFF), "me")
+                             poll.TrainingPollMsgBuilder(2, embedDescription, reactions, 0x2A3AFF, threadMsgStr), "me")
 
 saturdayPollRoutine = \
     poll.TrainingPollRoutine("saturday_training_poll",
                              "Saturday training poll", bot,
-                             poll.TrainingPollEmbedBuilder(5, 0xFF5733), "sa")
+                             poll.TrainingPollMsgBuilder(5, embedDescription, reactions, 0xFF5733, threadMsgStr), "sa")
 
 bot.add_routine(wednesdayPollRoutine)
 bot.add_routine(saturdayPollRoutine)
+
+bot.param.stateHeader = "#state#\n#sauvegarde de l'état du bot\n"  # will be written by the bot
+bot.param.configHeader = "#config#"  # will not be written by the bot
+
 bot.run(CST.BOT_TOKEN)
 
 # def main():
