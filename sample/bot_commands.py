@@ -71,13 +71,13 @@ def load_commands(bot: discord.Bot):
         for routine in bot.routines:
             if routine.cmdKeyWord == trainingDayName:
                 routine.enable(executionDayNum, channelId)
-                continue
+                await ctx.send(
+                    f'"{routine.displayName}" started{asTestMsg}. '
+                    f'Sending day is {poll.format_weekday_num(executionDayNum)}.')
 
         await bot.save_state()
 
-        await ctx.send(
-            f'"{routine.displayName}" started{asTestMsg}. '
-            f'Sending day is {poll.format_weekday_num(executionDayNum)}.')
+
 
     """Stop one message vote for mercredi or samedi. Enter the loop to stop : me or sa."""
 
@@ -89,7 +89,7 @@ def load_commands(bot: discord.Bot):
         if trainingDayName not in dayNameNums.keys():
             await ctx.send("The name provided for the training day is unknown.")
             return
-        foundRoutine = False
+
         for routine in bot.routines:
             if routine.cmdKeyWord == trainingDayName:
                 foundRoutine = True
@@ -97,9 +97,8 @@ def load_commands(bot: discord.Bot):
                 routine.disable()
                 await ctx.send(f'"{routine.displayName}" stopped.')
                 await bot.save_state()
-                continue
-        if not foundRoutine:
-            await ctx.send("No running routine for the training day provided.")
+                break
+
 
 
     @bot.command()

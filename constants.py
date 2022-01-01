@@ -1,9 +1,6 @@
-# from backports import zoneinfo
-import datetime
-
-import arrow
 # Constantes utilisées par le bot, pour éviter de les écrire dans le code
 # une variable par ligne, sans commentaires sur la ligne
+from dateutil import tz
 
 # le token est le mode d'authentification du client Python au serveur Discord
 BOT_TOKEN = "OTEzNTU2MzE4NzY4NDYzODkz.YaANnw.XaW1ixXbQx5fZt2FYoXVgjM7kPI"
@@ -15,10 +12,9 @@ CONFIG_CHANNEL_ID = 925507525992931378
 TRAINING_POLLS_CHANNEL_ID = 913522652239519775
 
 # Identifier of the Discord channel dedicated to tests.
-TEST_CHANNEL_ID = 925875143895547964
+TEST_CHANNEL_ID = 926902411501645884
 
-# Path to the file describing the state in which to start the bot.
-STATE_FILE_PATH = "../state.ini"
+LICENCIE_ROLE_ID = 898137491780014090
 
 # Maximum duration of any sleep (in seconds).
 # IMPORTANT: there seems to be a bug with asyncio, making that any wait longer
@@ -27,8 +23,7 @@ STATE_FILE_PATH = "../state.ini"
 MAX_SLEEP_DURATION = 3600
 # Time zone to use when receiving dates from the user, or displaying them to him.
 
-from dateutil import tz
-USER_TIMEZONE = tz.gettz('Europe/Paris')
-# zoneinfo.ZoneInfo("Europe/Paris")
+MAX_THREAD_ARCHIVING_DURATION = 60 * 24 * 3
 
+USER_TIMEZONE = tz.gettz('Europe/Paris')
 

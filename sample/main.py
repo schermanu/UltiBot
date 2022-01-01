@@ -4,8 +4,8 @@
 # if any('SPYDER' in name for name in os.environ):
 #     import nest_asyncio
 #     nest_asyncio.apply()
-from sample.theBot import TheBot
-from sample import poll
+import theBot
+import poll
 import constants as CST
 # from bot_commands import load_commands, BotCommands
 from discord.ext import commands
