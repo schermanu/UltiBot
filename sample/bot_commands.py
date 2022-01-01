@@ -6,35 +6,32 @@ from discord.ext import commands
 
 from sample import poll
 import constants as CST
-import io
 
 
 # "name" parameter of a command is what need to be typed in discord to call it
 
 def load_commands(bot: discord.Bot):
-    # wednesdayPollRoutine, saturdayPollRoutine = None, None
-
-    @bot.command(
-        name='getlastmessage')
-    async def client_getlastmessage(ctx, ID):
-        """Get the last message of a text channel."""
-        channel = bot.get_channel(int(ID))
-        if channel is None:
-            await ctx.send('Could not find that channel.')
-            return
-        # NOTE: get_channel can return a TextChannel, VoiceChannel,
-        # or CategoryChannel. You may want to add a check to make sure
-        # the ID is for text channels only
-
-        message = await channel.fetch_message(
-            channel.last_message_id)
-        # NOTE: channel.last_message_id could return None; needs a check
-        for i in range(20):
-            await ctx.send(
-                f'Last message in {channel.name} sent by {message.author.name}:\n'
-                + message.content
-            )
-        await ctx.message.delete()
+    # @bot.command(
+    #     name='getlastmessage')
+    # async def client_getlastmessage(ctx, ID):
+    #     """Get the last message of a text channel."""
+    #     channel = bot.get_channel(int(ID))
+    #     if channel is None:
+    #         await ctx.send('Could not find that channel.')
+    #         return
+    #     # NOTE: get_channel can return a TextChannel, VoiceChannel,
+    #     # or CategoryChannel. You may want to add a check to make sure
+    #     # the ID is for text channels only
+    #
+    #     message = await channel.fetch_message(
+    #         channel.last_message_id)
+    #     # NOTE: channel.last_message_id could return None; needs a check
+    #     for i in range(20):
+    #         await ctx.send(
+    #             f'Last message in {channel.name} sent by {message.author.name}:\n'
+    #             + message.content
+    #         )
+    #     await ctx.message.delete()
 
     @bot.command()
     async def set_poll_time(ctx: commands.Context, hoursStr, minutesStr=None, secondsStr=None):
@@ -77,8 +74,6 @@ def load_commands(bot: discord.Bot):
 
         await bot.save_state()
 
-
-
     """Stop one message vote for mercredi or samedi. Enter the loop to stop : me or sa."""
 
     @bot.command()
@@ -98,8 +93,6 @@ def load_commands(bot: discord.Bot):
                 await ctx.send(f'"{routine.displayName}" stopped.')
                 await bot.save_state()
                 break
-
-
 
     @bot.command()
     async def status(ctx: commands.Context):

@@ -4,10 +4,6 @@ import datetime
 import constants as CST
 
 
-def __init__():
-    pass
-
-
 # Builder of an embed that will serve as a poll for a given training.
 class TrainingPollMsgBuilder:
 
@@ -34,8 +30,6 @@ class TrainingPollMsgBuilder:
 
         f = await msg.create_thread(name=trainingDateStr, auto_archive_duration=CST.MAX_THREAD_ARCHIVING_DURATION)
         await f.send(self.threadMsgStr)
-
-
 
 
 # Routine that sends a poll for a training on a given channel, on a given day of the week.
@@ -101,7 +95,8 @@ class TrainingPollRoutine:
 
         state[self.name] = \
             {
-                'isEnabled': "" if self.isEnabled is None else self.isEnabled,# isEnabled a forcément une valeur puisqu'il est initialisé a False
+                'isEnabled': "" if self.isEnabled is None else self.isEnabled,
+                # isEnabled a forcément une valeur puisqu'il est initialisé a False
                 'execDayNum': "" if self.executionDayNum is None else self.executionDayNum,
                 'channelId': "" if self.channelId is None else self.channelId,
                 'lastExecDate': "" if self.lastExecutionDate is None else self.lastExecutionDate.isoformat(),
@@ -151,5 +146,3 @@ def format_weekday_num(weekDayNum, format='EEEE', refDate=None):
 
 def format_datetime(dateTime, placeholder='never', format='%d/%m/%Y, %H:%M:%S'):
     return placeholder if dateTime is None else dateTime.strftime(format)
-
-
