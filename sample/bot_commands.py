@@ -3,6 +3,7 @@ import datetime
 
 import discord
 from discord.ext import commands
+from discord.commands import Option, SlashCommandGroup
 
 from sample import poll
 import constants as CST
@@ -10,28 +11,36 @@ import constants as CST
 
 # "name" parameter of a command is what need to be typed in discord to call it
 
-def load_commands(bot: discord.Bot):
-    # @bot.command(
-    #     name='getlastmessage')
-    # async def client_getlastmessage(ctx, ID):
-    #     """Get the last message of a text channel."""
-    #     channel = bot.get_channel(int(ID))
-    #     if channel is None:
-    #         await ctx.send('Could not find that channel.')
-    #         return
-    #     # NOTE: get_channel can return a TextChannel, VoiceChannel,
-    #     # or CategoryChannel. You may want to add a check to make sure
-    #     # the ID is for text channels only
-    #
-    #     message = await channel.fetch_message(
-    #         channel.last_message_id)
-    #     # NOTE: channel.last_message_id could return None; needs a check
-    #     for i in range(20):
-    #         await ctx.send(
-    #             f'Last message in {channel.name} sent by {message.author.name}:\n'
-    #             + message.content
-    #         )
-    #     await ctx.message.delete()
+def load_commands(bot: commands.Bot):
+
+    @bot.slash_command(description="hello test")
+    async def tes(ctx: discord.ApplicationContext):
+        await ctx.respond("coucou tes")
+
+    groupe = SlashCommandGroup("covid", "commands related to covid info")
+
+    @groupe.command(
+        description="Get the last message of a text channel.")
+    async def client_getlastmessage(ctx: discord.ApplicationContext, identifiant: Option(str, description="Name of the Country you want the Covid info of!", required=True, default=None)):
+        """Get the last message of a text channel."""
+        channel = bot.get_channel(int(identifiant))
+        if channel is None:
+            await ctx.respond('Could not find that channel.')
+            return
+        # NOTE: get_channel can return a TextChannel, VoiceChannel,
+        # or CategoryChannel. You may want to add a check to make sure
+        # the ID is for text channels only
+
+        message = await channel.fetch_message(
+            channel.last_message_id)
+        # NOTE: channel.last_message_id could return None; needs a check
+
+        await ctx.respond(
+            f'Last message in {channel.name} sent by {message.author.name}:\n'
+            + message.content)
+
+        await ctx.message.delete()
+
 
     @bot.command()
     async def set_poll_time(ctx: commands.Context, hoursStr, minutesStr=None, secondsStr=None):
@@ -150,6 +159,8 @@ def load_commands(bot: discord.Bot):
     async def copyMsg(ctx: commands.Context, msgId):
         msg = await ctx.fetch_message(msgId)
         await ctx.send(msg.content)
+
+    bot.add_application_command(groupe)
 
     # @bot.event
     # async def on_ready():
