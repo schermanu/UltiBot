@@ -29,13 +29,13 @@ class TheBot(commands.Bot):
 
         @self.command()
         async def reload(ctx):
-            for filename in os.listdir('./cogs'):
+            for filename in os.listdir('./sample/cogs'):
                 if filename.endswith('.py'):
                     self.unload_extension(f'cogs.{filename[:-3]}')
                     self.load_extension(f'cogs.{filename[:-3]}')
             print('reload done')
 
-        for filename in os.listdir('./cogs'):
+        for filename in os.listdir('./sample/cogs'):
             if filename.endswith('.py'):
                 self.load_extension(f'cogs.{filename[:-3]}')
 
