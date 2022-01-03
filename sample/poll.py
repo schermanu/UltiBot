@@ -3,6 +3,8 @@ import discord
 import datetime
 import constants as CST
 
+from discord.ext import commands
+
 
 # Builder of an embed that will serve as a poll for a given training.
 class TrainingPollMsgBuilder:
@@ -77,16 +79,25 @@ class TrainingPollRoutine:
         # self.log(f"alreadyExecutedToday = {alreadyExecutedToday}")
 
         if self.isEnabled and today.weekday() == self.executionDayNum:
-            # comment if use alreadyExecutedToday
-            await self.trainingPollMsgBuilder.build(self)
-            self.lastExecutionDate = datetime.datetime.now(tz=CST.USER_TIMEZONE)
+            canceled_trainings = self.bot.canceledTrainings
+            trainingDate = get_date_from_weekday(self.trainingPollMsgBuilder.trainingDayNum)
+            training_canceled = False
+            for canceled_training in canceled_trainings:
+                if trainingDate.strftime("%d/%m") == canceled_training:
+                    training_canceled = True
+            if not training_canceled:
+                # comment if use alreadyExecutedToday
+                await self.trainingPollMsgBuilder.build(self)
+                self.lastExecutionDate = datetime.datetime.now(tz=CST.USER_TIMEZONE)
 
-            # uncomment if use alreadyExecutedToday
-            # if not alreadyExecutedToday:
-            #     await self.trainingPollMsgBuilder.build(self)
-            #     self.lastExecutionDate = datetime.datetime.now(tz=CST.USER_TIMEZONE)
-            # else:
-            #     self.log(f"alreadyExecutedToday = {alreadyExecutedToday}")
+                # uncomment if use alreadyExecutedToday
+                # if not alreadyExecutedToday:
+                #     await self.trainingPollMsgBuilder.build(self)
+                #     self.lastExecutionDate = datetime.datetime.now(tz=CST.USER_TIMEZONE)
+                # else:
+                #     self.log(f"alreadyExecutedToday = {alreadyExecutedToday}")
+            else:
+                self.log(f"canceled training")
 
     def log(self, msg):
         print(f"\t[routine \"{self.displayName}\"] {msg}")

@@ -1,10 +1,11 @@
 import io
+import os
 import configparser
 import datetime
 import asyncio
 
+import discord
 from discord.ext import commands
-from bot_commands import load_commands
 import constants as CST
 
 
@@ -15,6 +16,7 @@ class TheBot(commands.Bot):
         super().__init__(command_prefix=commands.when_mentioned_or('?'), case_insensitive=False,
                          intents=discord.Intents.all())
         self.param = BotParameters()
+        self.canceledTrainings = []
         self.routines = []
         self.routinesTask = None
         self.routinesTaskStartTime = None
@@ -132,11 +134,12 @@ class TheBot(commands.Bot):
         botStateStr, botConfigStr = await self.param.load_param_msgs(self)
         self.param.state.read_string(botStateStr)
         self.param.config.read_string(botConfigStr)
+        self.canceledTrainings = self.param.config.get_dates()
 
         if self.param.state.has_section('bot'):
-            botConfig = self.param.state['bot']
-            self.routinesTriggerTime = botConfig.gettime('routinesTriggerTime')
-            self.lastRoutinesTriggerDate = botConfig.getdatetime('lastRoutinesTriggerDate')
+            botStateConfig = self.param.state['bot']
+            self.routinesTriggerTime = botStateConfig.gettime('routinesTriggerTime')
+            self.lastRoutinesTriggerDate = botStateConfig.getdatetime('lastRoutinesTriggerDate')
 
             for routine in self.routines:
                 routine.load_routines_state(self.param.state)
@@ -187,6 +190,15 @@ class ConfigurationParser(configparser.ConfigParser):
             return datetime.time.fromisoformat(s)
         except (ValueError, TypeError):
             return None
+
+    def get_dates(self):
+        if self.has_section('canceled_trainings'):
+            canceled_trainings_cat = self['canceled_trainings']
+            canceled_trainings_str = canceled_trainings_cat.get('dates')
+            dates = canceled_trainings_str.split()
+        else:
+            dates = None
+        return dates
 
 
 class BotParameters:
