@@ -12,7 +12,8 @@ import constants as CST
 # class TheBot(commands.Bot):
 class TheBot(commands.Bot):
     def __init__(self):
-        super().__init__(command_prefix=commands.when_mentioned_or('?'), case_insensitive=False)
+        super().__init__(command_prefix=commands.when_mentioned_or('?'), case_insensitive=False,
+                         intents=discord.Intents.all())
         self.param = BotParameters()
         self.routines = []
         self.routinesTask = None
@@ -20,7 +21,21 @@ class TheBot(commands.Bot):
         # By giving no argument, this will be midnight by default.
         self.routinesTriggerTime = datetime.time()
         self.lastRoutinesTriggerDate = None
-        load_commands(self)
+        self.load_commands()
+
+    def load_commands(self):
+
+        @self.command()
+        async def reload(ctx):
+            for filename in os.listdir('./cogs'):
+                if filename.endswith('.py'):
+                    self.unload_extension(f'cogs.{filename[:-3]}')
+                    self.load_extension(f'cogs.{filename[:-3]}')
+            print('reload done')
+
+        for filename in os.listdir('./cogs'):
+            if filename.endswith('.py'):
+                self.load_extension(f'cogs.{filename[:-3]}')
 
     def add_routine(self, routine):
         self.routines.append(routine)
