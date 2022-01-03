@@ -83,7 +83,7 @@ class Interactions(commands.Cog):
         await ctx.send(msg.content)
 
     @commands.command(descrtiption='commande de test')
-    async def test(self, ctx: commands.Context):
+    async def react(self, ctx: commands.Context):
         if ctx.message.reference is None:
             warning = await ctx.reply("❌ The command message needs to be a response of the message to react to.")
             await asyncio.sleep(5)
