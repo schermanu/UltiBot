@@ -106,6 +106,11 @@ class Interactions(commands.Cog):
         # await ctx.send(msg.author)
         # botMember = await ctx.channel.fetch_members(913556318768463893)
 
+    @commands.command(descrtiption="Allow threads to avoid being archived")
+    async def avoid_archiving(self, ctx: commands.Context, threadId):
+
+
+        await ctx.message.delete()
 
 def setup(bot):
     bot.add_cog(Interactions(bot))

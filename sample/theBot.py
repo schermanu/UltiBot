@@ -17,6 +17,7 @@ class TheBot(commands.Bot):
                          intents=discord.Intents.all())
         self.param = BotParameters()
         self.canceledTrainings = []
+        self.protectedThreads = []
         self.routines = []
         self.routinesTask = None
         self.routinesTaskStartTime = None
@@ -38,32 +39,6 @@ class TheBot(commands.Bot):
         for filename in os.listdir('./sample/cogs'):
             if filename.endswith('.py'):
                 self.load_extension(f'cogs.{filename[:-3]}')
-
-    def add_routine(self, routine):
-        self.routines.append(routine)
-        return self
-
-    def set_routines_trigger_time(self, triggerTime):
-        self.routinesTriggerTime = triggerTime
-        self.restart_routines_task()
-        return self
-
-    def get_next_trigger_date(self):
-        now = datetime.datetime.now(tz=CST.USER_TIMEZONE)
-        triggerDate = datetime.datetime.combine(now, self.routinesTriggerTime, tzinfo=CST.USER_TIMEZONE)
-        # If the trigger time has passed for today, consider tomorrow's trigger time.
-        if triggerDate < now:
-            triggerDate += datetime.timedelta(days=1)
-        return triggerDate
-
-    def get_time_until_routines_trigger(self):
-        return self.get_next_trigger_date() - datetime.datetime.now(tz=CST.USER_TIMEZONE)
-
-    def restart_routines_task(self):
-        if self.routinesTask is not None:
-            self.routinesTask.cancel()
-        self.log("restarting routines task")
-        self.routinesTask = self.loop.create_task(self.run_routines())
 
     async def on_ready(self):
 
@@ -90,6 +65,36 @@ class TheBot(commands.Bot):
                 await self.run_routines_once()
 
         self.restart_routines_task()
+
+
+
+    #----------poll routine functions-------------
+
+    def add_routine(self, routine):
+        self.routines.append(routine)
+        return self
+
+    def set_routines_trigger_time(self, triggerTime):
+        self.routinesTriggerTime = triggerTime
+        self.restart_routines_task()
+        return self
+
+    def get_next_trigger_date(self):
+        now = datetime.datetime.now(tz=CST.USER_TIMEZONE)
+        triggerDate = datetime.datetime.combine(now, self.routinesTriggerTime, tzinfo=CST.USER_TIMEZONE)
+        # If the trigger time has passed for today, consider tomorrow's trigger time.
+        if triggerDate < now:
+            triggerDate += datetime.timedelta(days=1)
+        return triggerDate
+
+    def get_time_until_routines_trigger(self):
+        return self.get_next_trigger_date() - datetime.datetime.now(tz=CST.USER_TIMEZONE)
+
+    def restart_routines_task(self):
+        if self.routinesTask is not None:
+            self.routinesTask.cancel()
+        self.log("restarting routines task")
+        self.routinesTask = self.loop.create_task(self.run_routines())
 
     async def run_routines(self):
 
@@ -130,16 +135,21 @@ class TheBot(commands.Bot):
     def log(self, msg):
         print(f"[bot] {msg}")
 
+
+    #----------------bot startup config --------------
+
     async def load_state_and_config(self):
         botStateStr, botConfigStr = await self.param.load_param_msgs(self)
         self.param.state.read_string(botStateStr)
         self.param.config.read_string(botConfigStr)
+
         self.canceledTrainings = self.param.config.get_dates()
 
         if self.param.state.has_section('bot'):
             botStateConfig = self.param.state['bot']
             self.routinesTriggerTime = botStateConfig.gettime('routinesTriggerTime')
             self.lastRoutinesTriggerDate = botStateConfig.getdatetime('lastRoutinesTriggerDate')
+            self.protectedThreads = botStateConfig.getint('protected_threads')
 
             for routine in self.routines:
                 routine.load_routines_state(self.param.state)
@@ -212,9 +222,8 @@ class BotParameters:
     async def write_state(self, bot):
 
         buf = io.StringIO("")
-        self.state.write(
-            buf)  # utilisation d'un buffer car la methode write() de configParser ne permet pas d'ecrire
-        # dans une string
+        self.state.write(buf)  # utilisation d'un buffer car la methode write() de configParser
+        # ne permet pas d'ecrire dans une string
         strToWrite = buf.getvalue()
         buf.close()
         stateMsg = self.paramMessages["state"]
