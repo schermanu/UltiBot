@@ -16,7 +16,8 @@ embedDescription = "Préviens de ta présence à l'entraînement : \n" \
                    "❌ si tu viens pas\n" \
                    "❔ si tu sais pas encore"
 reactions = ["✅", "☑", "❌", "❔"]
-threadMsgStr = f"<@&{CST.LICENCIE_ROLE_ID}>\n**Fil de discussion dédié à cet entraînement**"
+threadMsgStr = "**Fil de discussion dédié à cet entraînement**"
+# threadMsgStr = f"<@&{CST.LICENCIE_ROLE_ID}>\n**Fil de discussion dédié à cet entraînement**"
 
 wednesdayPollRoutine = \
     poll.TrainingPollRoutine("wednesday_training_poll",
