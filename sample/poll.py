@@ -3,7 +3,6 @@ import discord
 import datetime
 import constants as CST
 
-from discord.ext import commands
 
 
 # Builder of an embed that will serve as a poll for a given training.

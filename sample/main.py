@@ -1,4 +1,3 @@
-# import os
 #
 # # This is mandatory when executing the script in Spyder.
 # if any('SPYDER' in name for name in os.environ):
@@ -7,8 +6,7 @@
 import theBot
 import poll
 import constants as CST
-# from bot_commands import load_commands, BotCommands
-from discord.ext import commands
+
 
 bot = theBot.TheBot()
 

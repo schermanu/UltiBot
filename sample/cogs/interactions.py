@@ -14,31 +14,31 @@ class Interactions(commands.Cog):
 
     # --------------------- slash commands ---------------------
     # called using / in discord (they can take up to an hour to appear in discord)
-    @commands.slash_command(brief='This is the brief description',
-                            description="Get the last message of a text channel")
-    async def get_last_message(self, ctx: discord.ApplicationContext,
-                               identifiant: Option(str,
-                                                   description="id of the channel",
-                                                   required=True,
-                                                   default=None)):
-        """Get the last message of a text channel."""
-        channel = ctx.bot.get_channel(int(identifiant))
-        if channel is None:
-            await ctx.respond('Could not find that channel.')
-            return
-        # NOTE: get_channel can return a TextChannel, VoiceChannel,
-        # or CategoryChannel. You may want to add a check to make sure
-        # the ID is for text channels only
+    
+    
+    # @commands.slash_command(brief='This is the brief description',
+    #                         description="Get the last message of a text channel")
+    # async def get_last_message(self, ctx: discord.ApplicationContext,
+    #                            identifiant: Option(str,
+    #                                                description="id of the channel",
+    #                                                required=True,
+    #                                                default=None)):
+    #     """Get the last message of a text channel."""
+    #     channel = ctx.bot.get_channel(int(identifiant))
+    #     if channel is None:
+    #         await ctx.respond('Could not find that channel.')
+    #         return
+    #
+    #     message = await channel.fetch_message(
+    #         channel.last_message_id)
+    #     # NOTE: channel.last_message_id could return None; needs a check
+    #
+    #     await ctx.respond(
+    #         f'Last message in {channel.name} sent by {message.author.name}:\n'
+    #         + message.content)
+    #
+    #     # await ctx.message.delete()
 
-        message = await channel.fetch_message(
-            channel.last_message_id)
-        # NOTE: channel.last_message_id could return None; needs a check
-
-        await ctx.respond(
-            f'Last message in {channel.name} sent by {message.author.name}:\n'
-            + message.content)
-
-        # await ctx.message.delete()
 
     @commands.slash_command(
         description="Copy the reactions of a given message.")
@@ -77,12 +77,13 @@ class Interactions(commands.Cog):
 
     # --------------------- normal commands ---------------------
     # called using ? in discord
-    @commands.command(name="copy_msg", descrtiption="copie le message ")
-    async def copy_msg(self, ctx: commands.Context, msgId):
-        msg = await ctx.fetch_message(msgId)
-        await ctx.send(msg.content)
 
-    @commands.command(descrtiption='commande de test')
+    # @commands.command(name="copy_msg", descrtiption="copie le message ")
+    # async def copy_msg(self, ctx: commands.Context, msgId):
+    #     msg = await ctx.fetch_message(msgId)
+    #     await ctx.send(msg.content)
+
+    @commands.command(descrtiption="Copy the reactions of a given message.")  # for polls
     async def react(self, ctx: commands.Context):
         if ctx.message.reference is None:
             warning = await ctx.reply("❌ The command message needs to be a response of the message to react to.")
