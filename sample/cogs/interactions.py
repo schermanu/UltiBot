@@ -14,8 +14,7 @@ class Interactions(commands.Cog):
 
     # --------------------- slash commands ---------------------
     # called using / in discord (they can take up to an hour to appear in discord)
-    
-    
+
     # @commands.slash_command(brief='This is the brief description',
     #                         description="Get the last message of a text channel")
     # async def get_last_message(self, ctx: discord.ApplicationContext,
@@ -38,7 +37,6 @@ class Interactions(commands.Cog):
     #         + message.content)
     #
     #     # await ctx.message.delete()
-
 
     @commands.slash_command(
         description="Copy the reactions of a given message.")
@@ -107,10 +105,35 @@ class Interactions(commands.Cog):
         # botMember = await ctx.channel.fetch_members(913556318768463893)
 
     @commands.command(descrtiption="Allow threads to avoid being archived")
-    async def avoid_archiving(self, ctx: commands.Context, threadId):
+    async def stop_archiving(self, ctx: commands.Context, threadIdStr=None):
+        threadId = None
+        if threadIdStr is None:
+            if ctx.channel.type.value == 11:  # type 11 corresponds to thread channels
+                threadId = ctx.channel.id
+        else:
+            try:
+                threadId = int(threadIdStr)
+                thread = ctx.bot.get_channel(threadId)
+                if not thread.type.value == 11:
+                    threadId = None
+            except:
+                threadId = None
 
-
+        if threadId is not None:
+            if ctx.bot.protectedThreads.count(threadId) == 0:
+                ctx.bot.protectedThreads.append(threadId)
+                await ctx.bot.reset_archiving_timer()
+                respond = await ctx.send("Thread added !")
+            else:
+                respond = await ctx.send("Thread already registered")
+        else:
+            respond = await ctx.send("This channel is not a thread, or the bot isn't member of it. "
+                           "Consider writing this command into a thread, or give the thread id as argument.")
+        await asyncio.sleep(5)
         await ctx.message.delete()
+        await respond.delete()
+
+
 
 def setup(bot):
     bot.add_cog(Interactions(bot))

@@ -65,10 +65,9 @@ class TheBot(commands.Bot):
                 await self.run_routines_once()
 
         self.restart_routines_task()
+        await self.reset_archiving_timer()
 
-
-
-    #----------poll routine functions-------------
+    # ----------poll routine functions-------------
 
     def add_routine(self, routine):
         self.routines.append(routine)
@@ -135,27 +134,42 @@ class TheBot(commands.Bot):
     def log(self, msg):
         print(f"[bot] {msg}")
 
+    # ---------------reset thread archiving timers----------
 
-    #----------------bot startup config --------------
+    async def reset_archiving_timer(self):
+        for thread_id in self.protectedThreads:
+            try:
+                thread = self.get_channel(thread_id)
+                if not thread.archived:
+                    await thread.edit(auto_archive_duration=60)
+                    await thread.edit(auto_archive_duration=4320)
+                else:
+                    self.protectedThreads.remove(thread_id)
+            except:
+                self.protectedThreads.remove(thread_id)
+        await self.save_state()
+
+    # ----------------bot startup config --------------
 
     async def load_state_and_config(self):
         botStateStr, botConfigStr = await self.param.load_param_msgs(self)
         self.param.state.read_string(botStateStr)
         self.param.config.read_string(botConfigStr)
 
-        self.canceledTrainings = self.param.config.get_dates()
+        self.canceledTrainings = [] if not self.param.config.has_section('canceled_trainings') \
+            else self.param.config['canceled_trainings'].get('dates').split()
 
         if self.param.state.has_section('bot'):
             botStateConfig = self.param.state['bot']
             self.routinesTriggerTime = botStateConfig.gettime('routinesTriggerTime')
             self.lastRoutinesTriggerDate = botStateConfig.getdatetime('lastRoutinesTriggerDate')
-            self.protectedThreads = botStateConfig.getint('protected_threads')
+            self.protectedThreads = [] if botStateConfig.get('protectedThreads') is None \
+                else list(map(int, botStateConfig.get('protectedThreads').split()))
 
             for routine in self.routines:
                 routine.load_routines_state(self.param.state)
 
     async def save_state(self):
-
         self.param.state['bot'] = \
             {
                 'routinesTriggerTime':
@@ -164,6 +178,9 @@ class TheBot(commands.Bot):
                 'lastRoutinesTriggerDate':
                     "" if self.lastRoutinesTriggerDate is None
                     else self.lastRoutinesTriggerDate.isoformat(),
+                'protectedThreads':
+                    "" if self.protectedThreads is None
+                    else ' '.join(map(str, self.protectedThreads)),
             }
 
         for routine in self.routines:
@@ -251,12 +268,16 @@ class BotParameters:
                 self.paramMessages["state"] = msg
                 botStateStr = msg.content
                 break
+        if botStateStr == "":
+            self.paramMessages["state"] = None
         for msg in allMsg:
             # the header doesn't contain comments here
             if msg.content.startswith(self.configHeader):
                 self.paramMessages["config"] = msg
                 botConfigStr = msg.content
                 break
+        if botConfigStr == "":
+            self.paramMessages["config"] = None
         print(f"state:\n{botStateStr}\n")
         print(f"config:\n{botConfigStr}")
         return botStateStr, botConfigStr
