@@ -16,8 +16,21 @@ embedDescription = "Préviens de ta présence à l'entraînement : \n" \
                    "❌ si tu viens pas\n" \
                    "❔ si tu sais pas encore"
 reactions = ["✅", "☑", "❌", "❔"]
+
+embedDescriptionMondayPoll = "L'entraînement du lundi a toujours lieu, quelque soit le nombre d'inscrits, " \
+                   "le vote est donc facultatif: \n" \
+                   "✅ si tu viens\n" \
+                   "❌ si tu viens pas"
+reactionsMondayPoll = ["✅", "❌"]
+
+
 threadMsgStr = "**Fil de discussion dédié à cet entraînement**"
-# threadMsgStr = f"<@&{CST.LICENCIE_ROLE_ID}>\n**Fil de discussion dédié à cet entraînement**"
+#threadMsgStr = f"<@&{CST.LICENCIE_ROLE_ID}>\n**Fil de discussion dédié à cet entraînement**"
+
+mondayPollRoutine = \
+    poll.TrainingPollRoutine("monday_training_poll",
+                             "Monday training poll", bot,
+                             poll.TrainingPollMsgBuilder(0, embedDescriptionMondayPoll, reactionsMondayPoll, 0x31B404, threadMsgStr), "lu")
 
 wednesdayPollRoutine = \
     poll.TrainingPollRoutine("wednesday_training_poll",
@@ -29,6 +42,7 @@ saturdayPollRoutine = \
                              "Saturday training poll", bot,
                              poll.TrainingPollMsgBuilder(5, embedDescription, reactions, 0xFF5733, threadMsgStr), "sa")
 
+bot.add_routine(mondayPollRoutine)
 bot.add_routine(wednesdayPollRoutine)
 bot.add_routine(saturdayPollRoutine)
 
