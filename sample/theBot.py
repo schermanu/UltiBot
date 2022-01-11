@@ -64,7 +64,7 @@ class TheBot(commands.Bot):
                     or self.lastRoutinesTriggerDate < previousTriggerDate):
                 await self.run_routines_once()
 
-        self.restart_routines_task()
+        await self.restart_routines_task()
         await self.reset_archiving_timer()
 
     # ----------poll routine functions-------------
@@ -73,9 +73,9 @@ class TheBot(commands.Bot):
         self.routines.append(routine)
         return self
 
-    def set_routines_trigger_time(self, triggerTime):
+    async def set_routines_trigger_time(self, triggerTime):
         self.routinesTriggerTime = triggerTime
-        self.restart_routines_task()
+        await self.restart_routines_task()
         return self
 
     def get_next_trigger_date(self):
@@ -89,7 +89,7 @@ class TheBot(commands.Bot):
     def get_time_until_routines_trigger(self):
         return self.get_next_trigger_date() - datetime.datetime.now(tz=CST.USER_TIMEZONE)
 
-    def restart_routines_task(self):
+    async def restart_routines_task(self):
         if self.routinesTask is not None:
             self.routinesTask.cancel()
         self.log("restarting routines task")
@@ -218,14 +218,14 @@ class ConfigurationParser(configparser.ConfigParser):
         except (ValueError, TypeError):
             return None
 
-    def get_dates(self):
-        if self.has_section('canceled_trainings'):
-            canceled_trainings_cat = self['canceled_trainings']
-            canceled_trainings_str = canceled_trainings_cat.get('dates')
-            dates = canceled_trainings_str.split()
-        else:
-            dates = None
-        return dates
+    # def get_dates(self):
+    #     if self.has_section('canceled_trainings'):
+    #         canceled_trainings_cat = self['canceled_trainings']
+    #         canceled_trainings_str = canceled_trainings_cat.get('dates')
+    #         dates = canceled_trainings_str.split()
+    #     else:
+    #         dates = None
+    #     return dates
 
 
 class BotParameters:

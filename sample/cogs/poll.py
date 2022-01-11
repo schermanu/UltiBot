@@ -19,7 +19,7 @@ class Poll(commands.Cog):
         minutes = 0 if minutesStr is None else int(minutesStr)
         seconds = 0 if secondsStr is None else int(secondsStr)
         triggerTime = datetime.time(hour=hours, minute=minutes, second=seconds)
-        ctx.bot.set_routines_trigger_time(triggerTime)
+        await ctx.bot.set_routines_trigger_time(triggerTime)
         await ctx.bot.save_state()
         # await ctx.respond(f"Polls sending time set to {triggerTime}.")
         await ctx.send(f"Polls sending time set to {triggerTime}.")

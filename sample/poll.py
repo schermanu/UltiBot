@@ -17,7 +17,7 @@ class TrainingPollMsgBuilder:
         self.reactions = reactions
         self.threadMsgStr = threadMsgStr
 
-    async def build(self, routine):
+    async def build(self, channel):
         # Calculate the date of the next training, for which to send the poll.
         trainingDate = get_date_from_weekday(self.trainingDayNum)
         trainingDateStr = \
@@ -25,12 +25,13 @@ class TrainingPollMsgBuilder:
 
         embed = discord.Embed(title=f"! {trainingDateStr} !", description=self.description, color=self.color)
 
-        msg = await routine.bot.get_channel(routine.channelId).send(embed=embed)
+        msg = await channel.send(embed=embed)
         for reaction in self.reactions:
             await msg.add_reaction(reaction)
 
         f = await msg.create_thread(name=trainingDateStr, auto_archive_duration=CST.MAX_THREAD_ARCHIVING_DURATION)
-        await f.send(self.threadMsgStr)
+        #await f.send(self.threadMsgStr)
+
 
 
 # Routine that sends a poll for a training on a given channel, on a given day of the week.
@@ -86,7 +87,7 @@ class TrainingPollRoutine:
                     training_canceled = True
             if not training_canceled:
                 # comment if use alreadyExecutedToday
-                await self.trainingPollMsgBuilder.build(self)
+                await self.trainingPollMsgBuilder.build(self.bot.get_channel(self.channelId))
                 self.lastExecutionDate = datetime.datetime.now(tz=CST.USER_TIMEZONE)
 
                 # uncomment if use alreadyExecutedToday
