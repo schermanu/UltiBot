@@ -24,8 +24,8 @@ class Poll(commands.Cog):
         # await ctx.respond(f"Polls sending time set to {triggerTime}.")
         await ctx.send(f"Polls sending time set to {triggerTime}.")
 
-    """Starts one message vote for mercredi or samedi.
-    Enter the loop to start: me or sa, and the day to send the vote """
+    """Starts one message vote for lundi, mercredi or samedi.
+    Enter the loop to start: lu, me or sa, and the day to send the vote """
 
     @commands.command()
     async def start_poll(self, ctx: commands.Context, trainingDayName, executionDayName, asTestStr=None):
@@ -54,7 +54,7 @@ class Poll(commands.Cog):
 
         await ctx.bot.save_state()
 
-    """Stop one message vote for mercredi or samedi. Enter the loop to stop : me or sa."""
+    """Stop one message vote for lundi, mercredi or samedi. Enter the loop to stop : lu, me or sa."""
 
     @commands.command()
     async def stop_poll(self, ctx: commands.Context, trainingDayName):
