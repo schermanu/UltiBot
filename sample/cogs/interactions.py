@@ -128,11 +128,10 @@ class Interactions(commands.Cog):
                 respond = await ctx.send("Thread already registered")
         else:
             respond = await ctx.send("This channel is not a thread, or the bot isn't member of it. "
-                           "Consider writing this command into a thread, or give the thread id as argument.")
+                                     "Consider writing this command into a thread, or give the thread id as argument.")
         await asyncio.sleep(5)
         await ctx.message.delete()
         await respond.delete()
-
 
 
 def setup(bot):
