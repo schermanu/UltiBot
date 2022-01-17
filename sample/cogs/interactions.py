@@ -91,7 +91,10 @@ class Interactions(commands.Cog):
                                          " name as argument.")
         else:
             try:
-                thread = discord.utils.get(ctx.guild.channels, name=given_name)
+                if not given_name.isdigit():
+                    given_name = given_name.replace('<', '').replace('>', '').replace('#', '')
+                threadId = int(given_name)
+                thread = ctx.bot.get_channel(threadId)
                 if thread.type.value == 11:
                     threadId = thread.id
                 else:
@@ -153,6 +156,8 @@ class Interactions(commands.Cog):
                 threadId = ctx.channel.id
         else:
             try:
+                if not threadIdStr.isdigit():
+                    threadIdStr = threadIdStr.replace('<', '').replace('>', '').replace('#', '')
                 threadId = int(threadIdStr)
                 thread = ctx.bot.get_channel(threadId)
                 if not thread.type.value == 11:
