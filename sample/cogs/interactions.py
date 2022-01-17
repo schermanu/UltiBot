@@ -73,6 +73,47 @@ class Interactions(commands.Cog):
     async def tes(self, ctx: discord.ApplicationContext):
         await ctx.respond("coucou tes")
 
+    @commands.slash_command(description="stop l'archivage du fil")
+    async def stop_archiving(self, ctx: discord.ApplicationContext,
+                  given_name: Option(str,
+                                       description="Id of the message (need to activate dev option,"
+                                                   "then copy id on the message options)",
+                                       required=False,
+                                       default=None)):
+        # await ctx.respond("coucou tes")
+        threadId = None
+        if given_name is None:
+            if ctx.channel.type.value == 11:  # type 11 corresponds to thread channels
+                threadId = ctx.channel.id
+            else:
+                respond = await ctx.send("This channel is not a thread. "
+                                         "Consider writing this command into a thread, or give the thread"
+                                         " name as argument.")
+        else:
+            try:
+                thread = discord.utils.get(ctx.guild.channels, name=given_name)
+                if thread.type.value == 11:
+                    threadId = thread.id
+                else:
+                    respond = await ctx.send("Given channel is not a thread. "
+                                             "Consider writing this command into a thread, "
+                                             "or give the thread name as argument.")
+            except:
+                respond = await ctx.respond("couldn't find the channel")
+
+        if threadId is not None:
+            if ctx.bot.protectedThreads.count(threadId) == 0:
+                ctx.bot.protectedThreads.append(threadId)
+                await ctx.bot.reset_archiving_timer()
+                respond = await ctx.send("Thread added !")
+            else:
+                respond = await ctx.send("Thread already registered")
+
+        await asyncio.sleep(5)
+        await ctx.message.delete()
+        await respond.delete()
+
+
     # --------------------- normal commands ---------------------
     # called using ? in discord
 
