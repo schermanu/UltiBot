@@ -26,8 +26,9 @@ class TrainingPollMsgBuilder:
         embed = discord.Embed(title=f"! {trainingDateStr} !", description=self.description, color=self.color)
 
         msg = await channel.send(embed=embed)
-        for reaction in self.reactions:
-            await msg.add_reaction(reaction)
+        if self.reactions is not None:
+            for reaction in self.reactions:
+                await msg.add_reaction(reaction)
 
         f = await msg.create_thread(name=trainingDateStr, auto_archive_duration=CST.MAX_THREAD_ARCHIVING_DURATION)
         #await f.send(self.threadMsgStr)
@@ -82,9 +83,10 @@ class TrainingPollRoutine:
             canceled_trainings = self.bot.canceledTrainings
             trainingDate = get_date_from_weekday(self.trainingPollMsgBuilder.trainingDayNum)
             training_canceled = False
-            for canceled_training in canceled_trainings:
+            for canceled_training in canceled_trainings.keys():
                 if trainingDate.strftime("%d/%m") == canceled_training:
                     training_canceled = True
+                    continue
             if not training_canceled:
                 # comment if use alreadyExecutedToday
                 await self.trainingPollMsgBuilder.build(self.bot.get_channel(self.channelId))
@@ -98,6 +100,14 @@ class TrainingPollRoutine:
                 #     self.log(f"alreadyExecutedToday = {alreadyExecutedToday}")
             else:
                 self.log(f"canceled training")
+                self.trainingPollMsgBuilder.description = f"⚠️ **L'entraînement est annulé car {canceled_trainings[canceled_training]}.**"
+                self.trainingPollMsgBuilder.reactions = None
+                await self.trainingPollMsgBuilder.build(self.bot.get_channel(self.channelId))
+                self.lastExecutionDate = datetime.datetime.now(tz=CST.USER_TIMEZONE)
+                del self.bot.canceledTrainings[canceled_training]
+                await self.bot.save_state()
+
+
 
     def log(self, msg):
         print(f"\t[routine \"{self.displayName}\"] {msg}")

@@ -3,6 +3,7 @@ import os
 import configparser
 import datetime
 import asyncio
+import json
 
 import discord
 from discord.ext import commands
@@ -16,8 +17,9 @@ class TheBot(commands.Bot):
         super().__init__(command_prefix=commands.when_mentioned_or('?'), case_insensitive=False,
                          intents=discord.Intents.all())
         self.param = BotParameters()
-        self.canceledTrainings = []
+        self.canceledTrainings = {}
         self.protectedThreads = []
+        self.noArchivingChannels = []  # channels where all threads are protected from archiving
         self.routines = []
         self.routinesTask = None
         self.routinesTaskStartTime = None
@@ -32,7 +34,7 @@ class TheBot(commands.Bot):
         async def reload(ctx):
             for filename in os.listdir('./sample/cogs'):
                 if filename.endswith('.py'):
-                    self.unload_extension(f'cogs.{filename[:-3]}')
+                    self.unload_extension(f'cogs.{filename[:-3]}')  # remove the 3 last char that correspond to '.py'
                     self.load_extension(f'cogs.{filename[:-3]}')
             print('reload done')
 
@@ -137,12 +139,36 @@ class TheBot(commands.Bot):
     # ---------------reset thread archiving timers----------
 
     async def reset_archiving_timer(self):
+        protected_channels = []
+        for no_archiving_channels_id in self.noArchivingChannels:
+            try:
+                protected_channels.append(self.get_channel(no_archiving_channels_id))
+            except:
+                self.noArchivingChannels.remove(no_archiving_channels_id)
+
+        for protected_channel in protected_channels:
+            for thread in protected_channel.threads:
+                try:
+                    if not thread.archived:
+                        await thread.edit(auto_archive_duration=60)
+                        await thread.edit(auto_archive_duration=4320)
+                except:
+                    pass
+
         for thread_id in self.protectedThreads:
             try:
                 thread = self.get_channel(thread_id)
-                if not thread.archived:
-                    await thread.edit(auto_archive_duration=60)
-                    await thread.edit(auto_archive_duration=4320)
+                already_protected = False
+                for protected_channel in protected_channels:
+                    if thread.parent == protected_channel:
+                        already_protected = True
+                        continue
+                if not already_protected:
+                    if not thread.archived:
+                        await thread.edit(auto_archive_duration=60)
+                        await thread.edit(auto_archive_duration=4320)
+                    else:
+                        self.protectedThreads.remove(thread_id)
                 else:
                     self.protectedThreads.remove(thread_id)
             except:
@@ -156,8 +182,10 @@ class TheBot(commands.Bot):
         self.param.state.read_string(botStateStr)
         self.param.config.read_string(botConfigStr)
 
-        self.canceledTrainings = [] if not self.param.config.has_section('canceled_trainings') \
-            else self.param.config['canceled_trainings'].get('dates').split()
+        self.canceledTrainings = {} if not self.param.state.has_section('canceled_trainings') \
+            else json.loads(self.param.state['canceled_trainings'].get('dates'))
+        # self.canceledTrainings = [] if not self.param.config.has_section('canceled_trainings') \
+        #     else self.param.config['canceled_trainings'].get('dates').split()
 
         if self.param.state.has_section('bot'):
             botStateConfig = self.param.state['bot']
@@ -165,6 +193,8 @@ class TheBot(commands.Bot):
             self.lastRoutinesTriggerDate = botStateConfig.getdatetime('lastRoutinesTriggerDate')
             self.protectedThreads = [] if botStateConfig.get('protectedThreads') is None \
                 else list(map(int, botStateConfig.get('protectedThreads').split()))
+            self.noArchivingChannels = [] if botStateConfig.get('noArchivingChannels') is None \
+                else list(map(int, botStateConfig.get('noArchivingChannels').split()))
 
             for routine in self.routines:
                 routine.load_routines_state(self.param.state)
@@ -181,7 +211,14 @@ class TheBot(commands.Bot):
                 'protectedThreads':
                     "" if self.protectedThreads is None
                     else ' '.join(map(str, self.protectedThreads)),
+                'noArchivingChannels':
+                    "" if self.noArchivingChannels is None
+                    else ' '.join(map(str, self.noArchivingChannels)),
             }
+
+        self.param.state['canceled_trainings'] = {
+            'dates': {} if self.canceledTrainings is None else json.dumps(self.canceledTrainings)
+        }
 
         for routine in self.routines:
             routine.save_routines_state(self.param.state)
