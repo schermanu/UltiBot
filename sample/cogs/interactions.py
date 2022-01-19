@@ -61,13 +61,13 @@ class Interactions(commands.Cog):
                     await msg.remove_reaction(reaction.emoji, user)
         await ctx.delete()
 
-    @commands.slash_command(name='clean_test_channel', description="Clear everything in the test channel")
-    async def _clean_test_channel(self, ctx: discord.ApplicationContext):
-        respond = await ctx.respond("working...")
-        for thread in ctx.bot.get_channel(CST.TEST_CHANNEL_ID).threads:
-            await thread.delete()
-        for msg in await ctx.bot.get_channel(CST.TEST_CHANNEL_ID).history().flatten():
-            await msg.delete()
+    # @commands.slash_command(name='clean_test_channel', description="Clear everything in the test channel")
+    # async def _clean_test_channel(self, ctx: discord.ApplicationContext):
+    #     respond = await ctx.respond("working...")
+    #     for thread in ctx.bot.get_channel(CST.TEST_CHANNEL_ID).threads:
+    #         await thread.delete()
+    #     for msg in await ctx.bot.get_channel(CST.TEST_CHANNEL_ID).history().flatten():
+    #         await msg.delete()
 
     # @commands.slash_command(description="Hello test")
     # async def _tes(self, ctx: discord.ApplicationContext):
@@ -241,6 +241,14 @@ class Interactions(commands.Cog):
         await asyncio.sleep(5)
         await ctx.message.delete()
         await response.delete()
+
+    @commands.command(name='clear', brief="Clear everything in the test channel")
+    async def clean_test_channel(self, ctx: commands.Context):
+        # respond = await ctx.respond("working...")
+        for thread in ctx.bot.get_channel(CST.TEST_CHANNEL_ID).threads:
+            await thread.delete()
+        for msg in await ctx.bot.get_channel(CST.TEST_CHANNEL_ID).history().flatten():
+            await msg.delete()
 
 
 def setup(bot):
