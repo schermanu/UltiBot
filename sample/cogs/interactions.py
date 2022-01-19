@@ -17,11 +17,11 @@ class Interactions(commands.Cog):
 
     # @commands.slash_command(brief='This is the brief description',
     #                         description="Get the last message of a text channel")
-    # async def get_last_message(self, ctx: discord.ApplicationContext,
-    #                            identifiant: Option(str,
-    #                                                description="id of the channel",
-    #                                                required=True,
-    #                                                default=None)):
+    # async def _get_last_message(self, ctx: discord.ApplicationContext,
+    #                             identifiant: Option(str,
+    #                                                 description="id of the channel",
+    #                                                 required=True,
+    #                                                 default=None)):
     #     """Get the last message of a text channel."""
     #     channel = ctx.bot.get_channel(int(identifiant))
     #     if channel is None:
@@ -38,82 +38,78 @@ class Interactions(commands.Cog):
     #
     #     # await ctx.message.delete()
 
-    @commands.slash_command(
-        description="Copy the reactions of a given message.")
-    async def react(self, ctx: discord.ApplicationContext,
-                    message_id: Option(str,
-                                       description="Id of the message (need to activate dev option,"
-                                                   "then copy id on the message options)",
-                                       required=True,
-                                       default=1)):
-        await ctx.message.delete()
-        if message_id == 1:
-            msg_error = await ctx.respond("need message id")
-            await asyncio.sleep(2)
-            await msg_error.delete()
+    @commands.slash_command(name="copy_reactions", brief="Copy the message's reactions",
+                            description="Copy the reactions of a given message, and delete user's reactions.")
+    async def _copy_reactions(self, ctx: discord.ApplicationContext,
+                              msg_id: Option(str,
+                                             description="Id of the message (need to activate dev option, "
+                                                         "then copy id on the message options)",
+                                             required=False,
+                                             default=1)):
+        response = await ctx.respond("working...")
+        if msg_id == 1:
+            msgs = await ctx.channel.history(limit=2).flatten()
+            msg = msgs[1]
         else:
-            msg = await ctx.fetch_message(message_id)
+            msg = await ctx.fetch_message(msg_id)
 
-            for reaction in msg.reactions:
-                await msg.add_reaction(reaction.emoji)
-                # remove the reactions made by the author of the message
-                async for user in reaction.users():
-                    if user == ctx.message.author:
-                        await msg.remove_reaction(reaction.emoji, user)
+        for reaction in msg.reactions:
+            await msg.add_reaction(reaction.emoji)
+            # remove the reactions made by the author of the message
+            async for user in reaction.users():
+                if user == ctx.author:
+                    await msg.remove_reaction(reaction.emoji, user)
+        await ctx.delete()
 
-    @commands.slash_command(description="Clear everything in the test channel")
-    async def clean_test_channel(self, ctx: discord.ApplicationContext):
+    @commands.slash_command(name='clean_test_channel', description="Clear everything in the test channel")
+    async def _clean_test_channel(self, ctx: discord.ApplicationContext):
         respond = await ctx.respond("working...")
         for thread in ctx.bot.get_channel(CST.TEST_CHANNEL_ID).threads:
             await thread.delete()
         for msg in await ctx.bot.get_channel(CST.TEST_CHANNEL_ID).history().flatten():
             await msg.delete()
 
-    @commands.slash_command(description="hello test")
-    async def tes(self, ctx: discord.ApplicationContext):
-        await ctx.respond("coucou tes")
+    # @commands.slash_command(description="Hello test")
+    # async def _tes(self, ctx: discord.ApplicationContext):
+    #     await ctx.respond("coucou tes")
 
-    @commands.slash_command(description="Stop l'archivage du fil")
-    async def stop_archiving(self, ctx: discord.ApplicationContext,
-                             given_name: Option(str,
-                                                description="Id of the message (need to activate dev option,"
-                                                            "then copy id on the message options)",
-                                                required=False,
-                                                default=None)):
+    @commands.slash_command(name='stop_archiving', description="Stop l'archivage du fil")
+    async def _stop_archiving(self, ctx: discord.ApplicationContext,
+                              thread: Option(str,
+                                             description="Id or name of the thread. "
+                                                         "Not necessary if command done in the thread",
+                                             required=False,
+                                             default=None)):
         threadId = None
-        if given_name is None:
+        if thread is None:
             if ctx.channel.type.value == 11:  # type 11 corresponds to thread channels
                 threadId = ctx.channel.id
             else:
-                respond = await ctx.send("This channel is not a thread. "
-                                         "Consider writing this command into a thread, or give the thread"
-                                         " name as argument.")
+                response = await ctx.respond("This channel is not a thread. "
+                                             "Consider writing this command into a thread, or give the thread"
+                                             " name as argument.")
         else:
             try:
-                if not given_name.isdigit():
-                    given_name = given_name.replace('<', '').replace('>', '').replace('#', '')
-                threadId = int(given_name)
+                if not thread.isdigit():
+                    thread = thread.replace('<', '').replace('>', '').replace('#', '')
+                threadId = int(thread)
                 thread = ctx.bot.get_channel(threadId)
                 if thread.type.value == 11:
                     threadId = thread.id
                 else:
-                    respond = await ctx.send("Given channel is not a thread. "
-                                             "Consider writing this command into a thread, "
-                                             "or give the thread name as argument.")
+                    response = await ctx.respond("Given channel is not a thread. "
+                                                 "Consider writing this command into a thread, "
+                                                 "or give the thread name as argument.")
             except:
-                respond = await ctx.respond("couldn't find the channel")
-        #HH
+                response = await ctx.respond("couldn't find the channel")
+        # HH
         if threadId is not None:
             if ctx.bot.protectedThreads.count(threadId) == 0:
                 ctx.bot.protectedThreads.append(threadId)
+                response = await ctx.respond("Thread added !")
                 await ctx.bot.reset_archiving_timer()
-                respond = await ctx.send("Thread added !")
             else:
-                respond = await ctx.send("Thread already registered")
-
-        await asyncio.sleep(5)
-        await ctx.message.delete()
-        await respond.delete()
+                response = await ctx.respond("Thread already registered")
 
     # --------------------- normal commands ---------------------
     # called using ? in discord
@@ -123,7 +119,7 @@ class Interactions(commands.Cog):
     #     msg = await ctx.fetch_message(msgId)
     #     await ctx.send(msg.content)
 
-    @commands.command(descrtiption="Copy the reactions of a given message.")  # for polls
+    @commands.command(brief="Copy the reactions of a given message.")  # for polls
     async def react(self, ctx: commands.Context):
         if ctx.message.reference is None:
             warning = await ctx.reply("❌ The command message needs to be a response of the message to react to.")
@@ -146,7 +142,7 @@ class Interactions(commands.Cog):
         # await ctx.send(msg.author)
         # botMember = await ctx.channel.fetch_members(913556318768463893)
 
-    @commands.command(descrtiption="Allow threads to avoid being archived")
+    @commands.command(brief="Stop thread archiving")
     async def stop_archiving(self, ctx: commands.Context, threadIdStr=None):
         threadId = None
         if threadIdStr is None:
@@ -177,7 +173,8 @@ class Interactions(commands.Cog):
         await ctx.message.delete()
         await respond.delete()
 
-    @commands.command(descrtiption="Allow all threads in this channel to avoid being archived")
+    @commands.command(brief="stop thread archiving in the channel",
+                      description="Allow all threads in this channel to avoid being archived")
     async def protect_channel(self, ctx: commands.Context, channel_id_str=None):
         channel_id = None
         if channel_id_str is None:
@@ -208,7 +205,7 @@ class Interactions(commands.Cog):
         await ctx.message.delete()
         await respond.delete()
 
-    @commands.command(descrtiption="Remove this channel from protected list")
+    @commands.command(brief="Remove this channel from protected list")
     async def remove_protection(self, ctx: commands.Context, channel_id_str=None):
         channel_id = None
         if channel_id_str is None:
@@ -227,49 +224,24 @@ class Interactions(commands.Cog):
         if channel_id is not None:
             if channel.type.value == 0:
                 if ctx.bot.noArchivingChannels.count(channel_id) == 0:
-                    respond = await ctx.send("Channel not registered !")
+                    response = await ctx.send("Channel not registered !")
                 else:
                     ctx.bot.noArchivingChannels.remove(channel_id)
-                    respond = await ctx.send("Channel removed")
+                    response = await ctx.send("Channel removed")
             elif channel.type.value == 11:
                 if ctx.bot.protectedThreads.count(channel_id) == 0:
-                    respond = await ctx.send("Thread not registered !")
+                    response = await ctx.send("Thread not registered !")
                 else:
                     ctx.bot.protectedThreads.remove(channel_id)
-                    respond = await ctx.send("Thread removed")
+                    response = await ctx.send("Thread removed")
         else:
-            respond = await ctx.send("Didn't find the channel. Consider writing this command into a channel, "
-                                     "or give the channel id as argument.")
-        await ctx.bot.save_state()
-        await asyncio.sleep(5)
-        await ctx.message.delete()
-        await respond.delete()
-
-    @commands.command(descrtiption="Remove this channel from protected list")
-    async def canceled_training(self, ctx: commands.Context, date, reason):
-
-        if date.replace('/', '').isdigit():
-            ctx.bot.canceledTrainings[date] = reason
-            response = await ctx.send(f"l'entraitnement du {date} est enregistré comme annulé car {reason}")
-        else:
-            response = await ctx.send("le format de date entré est incorrect (dd/mm)")
+            response = await ctx.send("Didn't find the channel. Consider writing this command into a channel, "
+                                      "or give the channel id as argument.")
         await ctx.bot.save_state()
         await asyncio.sleep(5)
         await ctx.message.delete()
         await response.delete()
 
-    @commands.command(descrtiption="Remove this channel from protected list")
-    async def remove_canceled_training(self, ctx: commands.Context, date):
-
-        if date.replace('/', '').isdigit():
-            del ctx.bot.canceledTrainings[date]
-            response = await ctx.send(f"l'entraitnement du {date} a été retiré")
-        else:
-            response = await ctx.send("le format de date entré est incorrect (dd/mm)")
-        await ctx.bot.save_state()
-        await asyncio.sleep(5)
-        await ctx.message.delete()
-        await response.delete()
 
 def setup(bot):
     bot.add_cog(Interactions(bot))

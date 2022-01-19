@@ -41,6 +41,7 @@ class TheBot(commands.Bot):
         for filename in os.listdir('./sample/cogs'):
             if filename.endswith('.py'):
                 self.load_extension(f'cogs.{filename[:-3]}')
+        # print(len(self.pending_application_commands))
 
     async def on_ready(self):
 
@@ -315,6 +316,6 @@ class BotParameters:
                 break
         if botConfigStr == "":
             self.paramMessages["config"] = None
-        print(f"state:\n{botStateStr}\n")
-        print(f"config:\n{botConfigStr}")
+        # print(f"state:\n{botStateStr}\n")
+        # print(f"config:\n{botConfigStr}")
         return botStateStr, botConfigStr
