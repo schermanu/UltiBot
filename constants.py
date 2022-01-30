@@ -23,7 +23,7 @@ LICENCIE_ROLE_ID = 898137491780014090
 MAX_SLEEP_DURATION = 3600
 # Time zone to use when receiving dates from the user, or displaying them to him.
 
-MAX_THREAD_ARCHIVING_DURATION = 60 * 24 * 3
+MAX_THREAD_ARCHIVING_DURATION = 60 * 24
 
 USER_TIMEZONE = tz.gettz('Europe/Paris')
 
