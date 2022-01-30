@@ -152,7 +152,7 @@ class TheBot(commands.Bot):
                 try:
                     if not thread.archived:
                         await thread.edit(auto_archive_duration=60)
-                        await thread.edit(auto_archive_duration=4320)
+                        await thread.edit(auto_archive_duration=CST.MAX_THREAD_ARCHIVING_DURATION)
                 except:
                     pass
 
