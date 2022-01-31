@@ -132,6 +132,7 @@ class TheBot(commands.Bot):
         for routine in self.routines:
             await routine.execute()
 
+        await self.reset_archiving_timer()
         await self.save_state()
 
     def log(self, msg):

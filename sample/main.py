@@ -12,7 +12,7 @@ bot = theBot.TheBot()
 
 embedDescription = "Préviens de ta présence à l'entraînement : \n" \
                    "✅ si tu viens\n" \
-                   "☑️que si on est assez pour des matchs\n" \
+                   "☑️ que si on est assez pour des matchs\n" \
                    "❌ si tu viens pas\n" \
                    "❔ si tu sais pas encore"
 reactions = ["✅", "☑", "❌", "❔"]
