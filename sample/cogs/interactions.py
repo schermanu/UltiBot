@@ -250,6 +250,14 @@ class Interactions(commands.Cog):
         for msg in await ctx.bot.get_channel(CST.TEST_CHANNEL_ID).history().flatten():
             await msg.delete()
 
+    # @commands.command(name='embed', brief="Create an embed")
+    # async def embed(self, ctx: commands.Context):
+    #     # respond = await ctx.respond("working...")
+    #     msgs = await ctx.channel.history(limit=2).flatten()
+    #     last_msg = msgs[1]
+    #     embed = discord.Embed(title=f"posté par {ctx.message.author.nick}", description=last_msg.content)
+    #     await ctx.send(embed=embed)
+
 
 def setup(bot):
     bot.add_cog(Interactions(bot))
