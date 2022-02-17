@@ -139,43 +139,57 @@ class TheBot(commands.Bot):
         print(f"[bot] {msg}")
 
     # ---------------reset thread archiving timers----------
-
+    # this version of the function reset the thread timers for all threads in the server.
     async def reset_archiving_timer(self):
-        protected_channels = []
-        for no_archiving_channels_id in self.noArchivingChannels:
-            try:
-                protected_channels.append(self.get_channel(no_archiving_channels_id))
-            except:
-                self.noArchivingChannels.remove(no_archiving_channels_id)
+        for guild in self.guilds:
+            for channel in guild.channels:
+                if channel.type.name == 'text':
+                    for thread in channel.threads:
+                        try:
+                            if not thread.archived:
+                                await thread.edit(auto_archive_duration=60)
+                                await thread.edit(auto_archive_duration=CST.MAX_THREAD_ARCHIVING_DURATION)
+                        except:
+                            pass
 
-        for protected_channel in protected_channels:
-            for thread in protected_channel.threads:
-                try:
-                    if not thread.archived:
-                        await thread.edit(auto_archive_duration=60)
-                        await thread.edit(auto_archive_duration=CST.MAX_THREAD_ARCHIVING_DURATION)
-                except:
-                    pass
 
-        for thread_id in self.protectedThreads:
-            try:
-                thread = self.get_channel(thread_id)
-                already_protected = False
-                for protected_channel in protected_channels:
-                    if thread.parent == protected_channel:
-                        already_protected = True
-                        continue
-                if not already_protected:
-                    if not thread.archived:
-                        await thread.edit(auto_archive_duration=60)
-                        await thread.edit(auto_archive_duration=4320)
-                    else:
-                        self.protectedThreads.remove(thread_id)
-                else:
-                    self.protectedThreads.remove(thread_id)
-            except:
-                self.protectedThreads.remove(thread_id)
-        await self.save_state()
+    # this version of the function reset the thread timers for threads in self.noArchivingChannels and self.protectedThreads.
+    # async def reset_archiving_timer(self):
+    #     protected_channels = []
+    #     for no_archiving_channels_id in self.noArchivingChannels:
+    #         try:
+    #             protected_channels.append(self.get_channel(no_archiving_channels_id))
+    #         except:
+    #             self.noArchivingChannels.remove(no_archiving_channels_id)
+    #
+    #     for protected_channel in protected_channels:
+    #         for thread in protected_channel.threads:
+    #             try:
+    #                 if not thread.archived:
+    #                     await thread.edit(auto_archive_duration=60)
+    #                     await thread.edit(auto_archive_duration=CST.MAX_THREAD_ARCHIVING_DURATION)
+    #             except:
+    #                 pass
+    #
+    #     for thread_id in self.protectedThreads:
+    #         try:
+    #             thread = self.get_channel(thread_id)
+    #             already_protected = False
+    #             for protected_channel in protected_channels:
+    #                 if thread.parent == protected_channel:
+    #                     already_protected = True
+    #                     continue
+    #             if not already_protected:
+    #                 if not thread.archived:
+    #                     await thread.edit(auto_archive_duration=60)
+    #                     await thread.edit(auto_archive_duration=4320)
+    #                 else:
+    #                     self.protectedThreads.remove(thread_id)
+    #             else:
+    #                 self.protectedThreads.remove(thread_id)
+    #         except:
+    #             self.protectedThreads.remove(thread_id)
+    #     await self.save_state()
 
     # ----------------bot startup config --------------
 
