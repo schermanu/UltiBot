@@ -73,43 +73,43 @@ class Interactions(commands.Cog):
     # async def _tes(self, ctx: discord.ApplicationContext):
     #     await ctx.respond("coucou tes")
 
-    @commands.slash_command(name='stop_archiving', description="Stop l'archivage du fil")
-    async def _stop_archiving(self, ctx: discord.ApplicationContext,
-                              thread: Option(str,
-                                             description="Id or name of the thread. "
-                                                         "Not necessary if command done in the thread",
-                                             required=False,
-                                             default=None)):
-        threadId = None
-        if thread is None:
-            if ctx.channel.type.value == 11:  # type 11 corresponds to thread channels
-                threadId = ctx.channel.id
-            else:
-                response = await ctx.respond("This channel is not a thread. "
-                                             "Consider writing this command into a thread, or give the thread"
-                                             " name as argument.")
-        else:
-            try:
-                if not thread.isdigit():
-                    thread = thread.replace('<', '').replace('>', '').replace('#', '')
-                threadId = int(thread)
-                thread = ctx.bot.get_channel(threadId)
-                if thread.type.value == 11:
-                    threadId = thread.id
-                else:
-                    response = await ctx.respond("Given channel is not a thread. "
-                                                 "Consider writing this command into a thread, "
-                                                 "or give the thread name as argument.")
-            except:
-                response = await ctx.respond("couldn't find the channel")
-        # HH
-        if threadId is not None:
-            if ctx.bot.protectedThreads.count(threadId) == 0:
-                ctx.bot.protectedThreads.append(threadId)
-                response = await ctx.respond("Thread added !")
-                await ctx.bot.reset_archiving_timer()
-            else:
-                response = await ctx.respond("Thread already registered")
+    # @commands.slash_command(name='stop_archiving', description="Stop l'archivage du fil")
+    # async def _stop_archiving(self, ctx: discord.ApplicationContext,
+    #                           thread: Option(str,
+    #                                          description="Id or name of the thread. "
+    #                                                      "Not necessary if command done in the thread",
+    #                                          required=False,
+    #                                          default=None)):
+    #     threadId = None
+    #     if thread is None:
+    #         if ctx.channel.type.value == 11:  # type 11 corresponds to thread channels
+    #             threadId = ctx.channel.id
+    #         else:
+    #             response = await ctx.respond("This channel is not a thread. "
+    #                                          "Consider writing this command into a thread, or give the thread"
+    #                                          " name as argument.")
+    #     else:
+    #         try:
+    #             if not thread.isdigit():
+    #                 thread = thread.replace('<', '').replace('>', '').replace('#', '')
+    #             threadId = int(thread)
+    #             thread = ctx.bot.get_channel(threadId)
+    #             if thread.type.value == 11:
+    #                 threadId = thread.id
+    #             else:
+    #                 response = await ctx.respond("Given channel is not a thread. "
+    #                                              "Consider writing this command into a thread, "
+    #                                              "or give the thread name as argument.")
+    #         except:
+    #             response = await ctx.respond("couldn't find the channel")
+    #     # HH
+    #     if threadId is not None:
+    #         if ctx.bot.protectedThreads.count(threadId) == 0:
+    #             ctx.bot.protectedThreads.append(threadId)
+    #             response = await ctx.respond("Thread added !")
+    #             await ctx.bot.reset_archiving_timer()
+    #         else:
+    #             response = await ctx.respond("Thread already registered")
 
     # --------------------- normal commands ---------------------
     # called using ? in discord
@@ -142,105 +142,105 @@ class Interactions(commands.Cog):
         # await ctx.send(msg.author)
         # botMember = await ctx.channel.fetch_members(913556318768463893)
 
-    @commands.command(brief="Stop thread archiving")
-    async def stop_archiving(self, ctx: commands.Context, threadIdStr=None):
-        threadId = None
-        if threadIdStr is None:
-            if ctx.channel.type.value == 11:  # type 11 corresponds to thread channels
-                threadId = ctx.channel.id
-        else:
-            try:
-                if not threadIdStr.isdigit():
-                    threadIdStr = threadIdStr.replace('<', '').replace('>', '').replace('#', '')
-                threadId = int(threadIdStr)
-                thread = ctx.bot.get_channel(threadId)
-                if not thread.type.value == 11:
-                    threadId = None
-            except:
-                threadId = None
+    # @commands.command(brief="Stop thread archiving")
+    # async def stop_archiving(self, ctx: commands.Context, threadIdStr=None):
+    #     threadId = None
+    #     if threadIdStr is None:
+    #         if ctx.channel.type.value == 11:  # type 11 corresponds to thread channels
+    #             threadId = ctx.channel.id
+    #     else:
+    #         try:
+    #             if not threadIdStr.isdigit():
+    #                 threadIdStr = threadIdStr.replace('<', '').replace('>', '').replace('#', '')
+    #             threadId = int(threadIdStr)
+    #             thread = ctx.bot.get_channel(threadId)
+    #             if not thread.type.value == 11:
+    #                 threadId = None
+    #         except:
+    #             threadId = None
+    #
+    #     if threadId is not None:
+    #         if ctx.bot.protectedThreads.count(threadId) == 0:
+    #             ctx.bot.protectedThreads.append(threadId)
+    #             await ctx.bot.reset_archiving_timer()
+    #             respond = await ctx.send("Thread added !")
+    #         else:
+    #             respond = await ctx.send("Thread already registered")
+    #     else:
+    #         respond = await ctx.send("This channel is not a thread. "
+    #                                  "Consider writing this command into a thread, or give the thread id as argument.")
+    #     await asyncio.sleep(5)
+    #     await ctx.message.delete()
+    #     await respond.delete()
 
-        if threadId is not None:
-            if ctx.bot.protectedThreads.count(threadId) == 0:
-                ctx.bot.protectedThreads.append(threadId)
-                await ctx.bot.reset_archiving_timer()
-                respond = await ctx.send("Thread added !")
-            else:
-                respond = await ctx.send("Thread already registered")
-        else:
-            respond = await ctx.send("This channel is not a thread. "
-                                     "Consider writing this command into a thread, or give the thread id as argument.")
-        await asyncio.sleep(5)
-        await ctx.message.delete()
-        await respond.delete()
-
-    @commands.command(brief="stop thread archiving in the channel",
-                      description="Allow all threads in this channel to avoid being archived")
-    async def protect_channel(self, ctx: commands.Context, channel_id_str=None):
-        channel_id = None
-        if channel_id_str is None:
-            if ctx.channel.type.value == 0:  # type 0 corresponds to text channels
-                channel_id = ctx.channel.id
-        else:
-            try:
-                if not channel_id_str.isdigit():
-                    channel_id_str = channel_id_str.replace('<', '').replace('>', '').replace('#', '')
-                channel_id = int(channel_id_str)
-                channel = ctx.bot.get_channel(channel_id)
-                if not channel.type.value == 0:
-                    channel_id = None
-            except:
-                channel_id = None
-
-        if channel_id is not None:
-            if ctx.bot.noArchivingChannels.count(channel_id) == 0:
-                ctx.bot.noArchivingChannels.append(channel_id)
-                await ctx.bot.reset_archiving_timer()
-                respond = await ctx.send("Channel added !")
-            else:
-                respond = await ctx.send("Channel already registered")
-        else:
-            respond = await ctx.send("Didn't find the channel. Consider writing this command into a channel, "
-                                     "or give the channel id as argument.")
-        await asyncio.sleep(5)
-        await ctx.message.delete()
-        await respond.delete()
-
-    @commands.command(brief="Remove this channel from protected list")
-    async def remove_protection(self, ctx: commands.Context, channel_id_str=None):
-        channel_id = None
-        if channel_id_str is None:
-            if ctx.channel.type.value == 0 or ctx.channel.type.value == 11:
-                channel_id = ctx.channel.id
-                channel = ctx.channel
-        else:
-            try:
-                if not channel_id_str.isdigit():
-                    channel_id_str = channel_id_str.replace('<', '').replace('>', '').replace('#', '')
-                channel_id = int(channel_id_str)
-                channel = ctx.bot.get_channel(channel_id)
-            except:
-                channel_id = None
-
-        if channel_id is not None:
-            if channel.type.value == 0:
-                if ctx.bot.noArchivingChannels.count(channel_id) == 0:
-                    response = await ctx.send("Channel not registered !")
-                else:
-                    ctx.bot.noArchivingChannels.remove(channel_id)
-                    response = await ctx.send("Channel removed")
-            elif channel.type.value == 11:
-                if ctx.bot.protectedThreads.count(channel_id) == 0:
-                    response = await ctx.send("Thread not registered !")
-                else:
-                    ctx.bot.protectedThreads.remove(channel_id)
-                    response = await ctx.send("Thread removed")
-        else:
-            response = await ctx.send("Didn't find the channel. Consider writing this command into a channel, "
-                                      "or give the channel id as argument.")
-        await ctx.bot.save_state()
-        await asyncio.sleep(5)
-        await ctx.message.delete()
-        await response.delete()
+    # @commands.command(brief="stop thread archiving in the channel",
+    #                   description="Allow all threads in this channel to avoid being archived")
+    # async def protect_channel(self, ctx: commands.Context, channel_id_str=None):
+    #     channel_id = None
+    #     if channel_id_str is None:
+    #         if ctx.channel.type.value == 0:  # type 0 corresponds to text channels
+    #             channel_id = ctx.channel.id
+    #     else:
+    #         try:
+    #             if not channel_id_str.isdigit():
+    #                 channel_id_str = channel_id_str.replace('<', '').replace('>', '').replace('#', '')
+    #             channel_id = int(channel_id_str)
+    #             channel = ctx.bot.get_channel(channel_id)
+    #             if not channel.type.value == 0:
+    #                 channel_id = None
+    #         except:
+    #             channel_id = None
+    #
+    #     if channel_id is not None:
+    #         if ctx.bot.noArchivingChannels.count(channel_id) == 0:
+    #             ctx.bot.noArchivingChannels.append(channel_id)
+    #             await ctx.bot.reset_archiving_timer()
+    #             respond = await ctx.send("Channel added !")
+    #         else:
+    #             respond = await ctx.send("Channel already registered")
+    #     else:
+    #         respond = await ctx.send("Didn't find the channel. Consider writing this command into a channel, "
+    #                                  "or give the channel id as argument.")
+    #     await asyncio.sleep(5)
+    #     await ctx.message.delete()
+    #     await respond.delete()
+    #
+    # @commands.command(brief="Remove this channel from protected list")
+    # async def remove_protection(self, ctx: commands.Context, channel_id_str=None):
+    #     channel_id = None
+    #     if channel_id_str is None:
+    #         if ctx.channel.type.value == 0 or ctx.channel.type.value == 11:
+    #             channel_id = ctx.channel.id
+    #             channel = ctx.channel
+    #     else:
+    #         try:
+    #             if not channel_id_str.isdigit():
+    #                 channel_id_str = channel_id_str.replace('<', '').replace('>', '').replace('#', '')
+    #             channel_id = int(channel_id_str)
+    #             channel = ctx.bot.get_channel(channel_id)
+    #         except:
+    #             channel_id = None
+    #
+    #     if channel_id is not None:
+    #         if channel.type.value == 0:
+    #             if ctx.bot.noArchivingChannels.count(channel_id) == 0:
+    #                 response = await ctx.send("Channel not registered !")
+    #             else:
+    #                 ctx.bot.noArchivingChannels.remove(channel_id)
+    #                 response = await ctx.send("Channel removed")
+    #         elif channel.type.value == 11:
+    #             if ctx.bot.protectedThreads.count(channel_id) == 0:
+    #                 response = await ctx.send("Thread not registered !")
+    #             else:
+    #                 ctx.bot.protectedThreads.remove(channel_id)
+    #                 response = await ctx.send("Thread removed")
+    #     else:
+    #         response = await ctx.send("Didn't find the channel. Consider writing this command into a channel, "
+    #                                   "or give the channel id as argument.")
+    #     await ctx.bot.save_state()
+    #     await asyncio.sleep(5)
+    #     await ctx.message.delete()
+    #     await response.delete()
 
     @commands.command(name='clear', brief="Clear everything in the test channel")
     async def clean_test_channel(self, ctx: commands.Context):

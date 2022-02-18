@@ -18,8 +18,8 @@ class TheBot(commands.Bot):
                          intents=discord.Intents.all())
         self.param = BotParameters()
         self.canceledTrainings = {}
-        self.protectedThreads = []
-        self.noArchivingChannels = []  # channels where all threads are protected from archiving
+        #self.protectedThreads = []
+        #self.noArchivingChannels = []  # channels where all threads are protected from archiving
         self.routines = []
         self.routinesTask = None
         self.routinesTaskStartTime = None
@@ -207,10 +207,10 @@ class TheBot(commands.Bot):
             botStateConfig = self.param.state['bot']
             self.routinesTriggerTime = botStateConfig.gettime('routinesTriggerTime')
             self.lastRoutinesTriggerDate = botStateConfig.getdatetime('lastRoutinesTriggerDate')
-            self.protectedThreads = [] if botStateConfig.get('protectedThreads') is None \
-                else list(map(int, botStateConfig.get('protectedThreads').split()))
-            self.noArchivingChannels = [] if botStateConfig.get('noArchivingChannels') is None \
-                else list(map(int, botStateConfig.get('noArchivingChannels').split()))
+            # self.protectedThreads = [] if botStateConfig.get('protectedThreads') is None \
+            #     else list(map(int, botStateConfig.get('protectedThreads').split()))
+            # self.noArchivingChannels = [] if botStateConfig.get('noArchivingChannels') is None \
+            #     else list(map(int, botStateConfig.get('noArchivingChannels').split()))
 
             for routine in self.routines:
                 routine.load_routines_state(self.param.state)
@@ -224,12 +224,12 @@ class TheBot(commands.Bot):
                 'lastRoutinesTriggerDate':
                     "" if self.lastRoutinesTriggerDate is None
                     else self.lastRoutinesTriggerDate.isoformat(),
-                'protectedThreads':
-                    "" if self.protectedThreads is None
-                    else ' '.join(map(str, self.protectedThreads)),
-                'noArchivingChannels':
-                    "" if self.noArchivingChannels is None
-                    else ' '.join(map(str, self.noArchivingChannels)),
+                # 'protectedThreads':
+                #     "" if self.protectedThreads is None
+                #     else ' '.join(map(str, self.protectedThreads)),
+                # 'noArchivingChannels':
+                #     "" if self.noArchivingChannels is None
+                #     else ' '.join(map(str, self.noArchivingChannels)),
             }
 
         self.param.state['canceled_trainings'] = {

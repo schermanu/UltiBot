@@ -11,7 +11,7 @@ TRAINING_POLLS_CHANNEL_ID = 913522652239519775
 # Identifier of the Discord channel dedicated to tests.
 TEST_CHANNEL_ID = 926902411501645884
 
-LICENCIE_ROLE_ID = 898137491780014090
+# LICENCIE_ROLE_ID = 898137491780014090
 
 # Maximum duration of any sleep (in seconds).
 # IMPORTANT: there seems to be a bug with asyncio, making that any wait longer
@@ -20,7 +20,7 @@ LICENCIE_ROLE_ID = 898137491780014090
 MAX_SLEEP_DURATION = 3600
 # Time zone to use when receiving dates from the user, or displaying them to him.
 
-MAX_THREAD_ARCHIVING_DURATION = 60 * 24
+MAX_THREAD_ARCHIVING_DURATION = 60 * 24 # should be 1h, 1 day, 3 days if boosted lvl1, 7days if lvl2
 
 USER_TIMEZONE = tz.gettz('Europe/Paris')
 
