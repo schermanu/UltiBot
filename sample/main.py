@@ -5,6 +5,7 @@
 #     nest_asyncio.apply()
 import theBot
 import poll
+import os
 import constants as CST
 
 
@@ -49,7 +50,7 @@ bot.add_routine(saturdayPollRoutine)
 bot.param.stateHeader = "#state#\n#sauvegarde de l'état du bot\n"  # will be written by the bot
 bot.param.configHeader = "#config#"  # will not be written by the bot
 
-bot.run(CST.BOT_TOKEN)
+bot.run(os.environ['BOT_TOKEN'])
 
 # def main():
 #     pass

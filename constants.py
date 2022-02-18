@@ -2,9 +2,6 @@
 # une variable par ligne, sans commentaires sur la ligne
 from dateutil import tz
 
-# le token est le mode d'authentification du client Python au serveur Discord
-BOT_TOKEN = "OTEzNTU2MzE4NzY4NDYzODkz.YaANnw.XaW1ixXbQx5fZt2FYoXVgjM7kPI"
-
 # id du salon discord dédié au paramétrage du bot #paramètres-du-bot
 CONFIG_CHANNEL_ID = 925507525992931378
 
