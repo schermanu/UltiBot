@@ -310,7 +310,11 @@ class BotParameters:
         # need to remove other messages?
 
     async def load_param_msgs(self, bot):
-        allMsg = await bot.get_channel(CST.CONFIG_CHANNEL_ID).history().flatten()
+        allMsg = None
+        try:
+            allMsg = await bot.get_channel(CST.CONFIG_CHANNEL_ID).history().flatten()
+        except:
+            print("wrong config channel id ")
         # botMessages = [msg for msg in allMsg if msg.author == self.user]
         # notBotMessage = [msg for msg in allMsg if msg not in botMessages]
         botStateStr = ""

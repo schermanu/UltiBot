@@ -1,0 +1,31 @@
+mutli servers :
+enregistrer données de chaques serveur dans bases de données
+     module stockage
+        connecter à une base de donnée
+        connecter google storage pour json de parametrisation des serveurs
+    modifier code : pour chaque guilds faire
+
+Sondage :
+une option a la fois dans sondage
+Licencies présents dans sondage
+Faire un message récapitulatif des présents blessés
+archivage automatique
+
+Google sheet :
+Ajouter Google sheet
+Avoir l'option blessé avec remarque, absent sur le long terme
+
+Fonctions futures :
+Autorole avec validation
+Créer post pour reunion
+Créer des événements
+Créer des sondages
+Calendrier syncronisé
+Ajouter suivi des blessés
+
+Idées :
+Session renfo sur discord
+
+
+
+
