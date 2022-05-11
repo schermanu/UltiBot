@@ -3,7 +3,7 @@
 from dateutil import tz
 
 # id du salon discord dédié au paramétrage du bot #paramètres-du-bot
-CONFIG_CHANNEL_ID = 925507525992931378
+CONFIG_CHANNEL_ID = 970372117495423036
 
 # Identifier of the Discord channel dedicated to training polls.
 TRAINING_POLLS_CHANNEL_ID = 913522652239519775

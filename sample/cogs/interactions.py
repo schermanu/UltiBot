@@ -46,7 +46,7 @@ class Interactions(commands.Cog):
                                                          "then copy id on the message options)",
                                              required=False,
                                              default=1)):
-        response = await ctx.respond("working...")
+        await ctx.respond("working...")
         if msg_id == 1:
             msgs = await ctx.channel.history(limit=2).flatten()
             msg = msgs[1]
