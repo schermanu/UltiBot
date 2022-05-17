@@ -1,4 +1,4 @@
-<mxfile host="app.diagrams.net" modified="2022-05-17T21:17:34.727Z" agent="5.0 (Windows)" etag="btpSsfXGMyu3iAQ38KWy" version="18.0.6" type="github">
+<mxfile host="app.diagrams.net" modified="2022-05-17T21:30:55.486Z" agent="5.0 (Windows)" etag="HiFBKaTvX_JxKJUvDE2S" version="18.0.6" type="github">
   <diagram id="NqhFc1NjUYj2qAZxfqg7" name="Page-1">
     <mxGraphModel dx="1157" dy="637" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
@@ -25,6 +25,9 @@
         <mxCell id="DXyumOJfPZMr4FoaWyzm-21" value="default_posting_time" style="text;html=1;align=left;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="DXyumOJfPZMr4FoaWyzm-1">
           <mxGeometry x="15" y="130" width="130" height="20" as="geometry" />
         </mxCell>
+        <mxCell id="DXyumOJfPZMr4FoaWyzm-41" value="language" style="text;html=1;align=left;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="DXyumOJfPZMr4FoaWyzm-1">
+          <mxGeometry x="15" y="150" width="70" height="20" as="geometry" />
+        </mxCell>
         <mxCell id="DXyumOJfPZMr4FoaWyzm-2" value="routines de sondages" style="swimlane;" vertex="1" parent="1">
           <mxGeometry x="39" y="260" width="200" height="200" as="geometry" />
         </mxCell>
@@ -40,8 +43,20 @@
         <mxCell id="DXyumOJfPZMr4FoaWyzm-13" value="posting_time" style="text;html=1;align=left;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="DXyumOJfPZMr4FoaWyzm-2">
           <mxGeometry x="15" y="90" width="90" height="20" as="geometry" />
         </mxCell>
+        <mxCell id="DXyumOJfPZMr4FoaWyzm-40" value="title_type (eg. Lundi 3, 19h)" style="text;html=1;align=left;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="DXyumOJfPZMr4FoaWyzm-2">
+          <mxGeometry x="15" y="110" width="160" height="20" as="geometry" />
+        </mxCell>
         <mxCell id="DXyumOJfPZMr4FoaWyzm-3" value="sondages" style="swimlane;" vertex="1" parent="1">
           <mxGeometry x="570" y="260" width="200" height="200" as="geometry" />
+        </mxCell>
+        <mxCell id="DXyumOJfPZMr4FoaWyzm-37" value="id" style="text;html=1;align=left;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="DXyumOJfPZMr4FoaWyzm-3">
+          <mxGeometry x="10" y="30" width="30" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="DXyumOJfPZMr4FoaWyzm-38" value="votes" style="text;html=1;align=left;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="DXyumOJfPZMr4FoaWyzm-3">
+          <mxGeometry x="10" y="50" width="40" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="DXyumOJfPZMr4FoaWyzm-39" value="class" style="text;html=1;align=left;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="DXyumOJfPZMr4FoaWyzm-3">
+          <mxGeometry x="10" y="70" width="50" height="20" as="geometry" />
         </mxCell>
         <mxCell id="DXyumOJfPZMr4FoaWyzm-14" value="entrainements" style="swimlane;" vertex="1" parent="1">
           <mxGeometry x="270" y="260" width="200" height="200" as="geometry" />
@@ -99,6 +114,24 @@
         </mxCell>
         <mxCell id="DXyumOJfPZMr4FoaWyzm-36" value="result" style="text;html=1;align=left;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="DXyumOJfPZMr4FoaWyzm-28">
           <mxGeometry x="10" y="170" width="50" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="DXyumOJfPZMr4FoaWyzm-43" value="infos futurs sondages" style="swimlane;" vertex="1" parent="1">
+          <mxGeometry x="39" y="490" width="200" height="200" as="geometry" />
+        </mxCell>
+        <mxCell id="DXyumOJfPZMr4FoaWyzm-44" value="guild_id" style="text;html=1;align=left;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="DXyumOJfPZMr4FoaWyzm-43">
+          <mxGeometry x="15" y="50" width="60" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="DXyumOJfPZMr4FoaWyzm-45" value="date" style="text;html=1;align=left;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="DXyumOJfPZMr4FoaWyzm-43">
+          <mxGeometry x="15" y="70" width="40" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="DXyumOJfPZMr4FoaWyzm-46" value="&lt;div align=&quot;left&quot;&gt;id&lt;/div&gt;" style="text;html=1;align=left;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="DXyumOJfPZMr4FoaWyzm-43">
+          <mxGeometry x="15" y="30" width="30" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="DXyumOJfPZMr4FoaWyzm-47" value="comment" style="text;html=1;align=left;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="DXyumOJfPZMr4FoaWyzm-43">
+          <mxGeometry x="15" y="90" width="70" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="DXyumOJfPZMr4FoaWyzm-48" value="deleted" style="text;html=1;align=left;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="DXyumOJfPZMr4FoaWyzm-43">
+          <mxGeometry x="15" y="110" width="60" height="20" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>
