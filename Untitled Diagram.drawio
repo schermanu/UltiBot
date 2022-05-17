@@ -1,1 +1,55 @@
-<mxfile host="app.diagrams.net" modified="2022-05-17T18:56:47.507Z" agent="5.0 (Windows)" version="18.0.6" etag="t8DKxwD515SRavG3jBLX" type="github"><diagram id="NqhFc1NjUYj2qAZxfqg7">UzV2zq1wL0osyPDNT0nNUTV2VTV2LsrPL4GwciucU3NyVI0MMlNUjV1UjYwMgFjVyA2HrCFY1qAgsSg1rwSLBiADYTaQg2Y1AA==</diagram></mxfile>
+<mxfile host="app.diagrams.net" modified="2022-05-17T20:15:37.021Z" agent="5.0 (Windows)" etag="LtZSW32aSGfL4KxSyFqv" version="18.0.6" type="github">
+  <diagram id="NqhFc1NjUYj2qAZxfqg7" name="Page-1">
+    <mxGraphModel dx="868" dy="478" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="DXyumOJfPZMr4FoaWyzm-1" value="serveur" style="swimlane;" vertex="1" parent="1">
+          <mxGeometry x="40" y="20" width="200" height="200" as="geometry" />
+        </mxCell>
+        <mxCell id="DXyumOJfPZMr4FoaWyzm-5" value="guild_discord_id" style="text;html=1;align=left;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="DXyumOJfPZMr4FoaWyzm-1">
+          <mxGeometry x="15" y="50" width="110" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="DXyumOJfPZMr4FoaWyzm-6" value="name" style="text;html=1;align=left;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="DXyumOJfPZMr4FoaWyzm-1">
+          <mxGeometry x="15" y="70" width="50" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="DXyumOJfPZMr4FoaWyzm-4" value="&lt;div align=&quot;left&quot;&gt;id&lt;/div&gt;" style="text;html=1;align=left;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="DXyumOJfPZMr4FoaWyzm-1">
+          <mxGeometry x="15" y="30" width="30" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="DXyumOJfPZMr4FoaWyzm-19" value="club_name" style="text;html=1;align=left;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="DXyumOJfPZMr4FoaWyzm-1">
+          <mxGeometry x="15" y="90" width="80" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="DXyumOJfPZMr4FoaWyzm-2" value="routines de sondages" style="swimlane;" vertex="1" parent="1">
+          <mxGeometry x="39" y="260" width="200" height="200" as="geometry" />
+        </mxCell>
+        <mxCell id="DXyumOJfPZMr4FoaWyzm-10" value="channel_discord_id" style="text;html=1;align=left;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="DXyumOJfPZMr4FoaWyzm-2">
+          <mxGeometry x="15" y="50" width="120" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="DXyumOJfPZMr4FoaWyzm-11" value="posting_weekday" style="text;html=1;align=left;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="DXyumOJfPZMr4FoaWyzm-2">
+          <mxGeometry x="15" y="70" width="110" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="DXyumOJfPZMr4FoaWyzm-12" value="&lt;div align=&quot;left&quot;&gt;id&lt;/div&gt;" style="text;html=1;align=left;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="DXyumOJfPZMr4FoaWyzm-2">
+          <mxGeometry x="15" y="30" width="30" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="DXyumOJfPZMr4FoaWyzm-13" value="posting_time" style="text;html=1;align=left;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="DXyumOJfPZMr4FoaWyzm-2">
+          <mxGeometry x="15" y="90" width="90" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="DXyumOJfPZMr4FoaWyzm-3" value="sondages" style="swimlane;" vertex="1" parent="1">
+          <mxGeometry x="570" y="260" width="200" height="200" as="geometry" />
+        </mxCell>
+        <mxCell id="DXyumOJfPZMr4FoaWyzm-14" value="entrainements" style="swimlane;" vertex="1" parent="1">
+          <mxGeometry x="270" y="260" width="200" height="200" as="geometry" />
+        </mxCell>
+        <mxCell id="DXyumOJfPZMr4FoaWyzm-15" value="weekday" style="text;html=1;align=left;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="DXyumOJfPZMr4FoaWyzm-14">
+          <mxGeometry x="15" y="50" width="60" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="DXyumOJfPZMr4FoaWyzm-16" value="time" style="text;html=1;align=left;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="DXyumOJfPZMr4FoaWyzm-14">
+          <mxGeometry x="15" y="70" width="40" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="DXyumOJfPZMr4FoaWyzm-17" value="&lt;div align=&quot;left&quot;&gt;id&lt;/div&gt;" style="text;html=1;align=left;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="DXyumOJfPZMr4FoaWyzm-14">
+          <mxGeometry x="15" y="30" width="30" height="20" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
