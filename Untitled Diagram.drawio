@@ -1,4 +1,4 @@
-<mxfile host="app.diagrams.net" modified="2022-05-20T10:19:26.780Z" agent="5.0 (Windows)" etag="hhTfhRHPTOW_KhQgBUyD" version="18.0.6" type="github">
+<mxfile host="app.diagrams.net" modified="2022-05-20T10:25:09.706Z" agent="5.0 (Windows)" etag="39r5Qv8X_CndoLr1Wv0x" version="18.0.6" type="github">
   <diagram id="NqhFc1NjUYj2qAZxfqg7" name="Page-1">
     <mxGraphModel dx="2177" dy="1809" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
@@ -458,7 +458,7 @@
         <mxCell id="DXyumOJfPZMr4FoaWyzm-210" value="créer" style="swimlane;rounded=1;startSize=20;" vertex="1" parent="1">
           <mxGeometry x="429.5" y="190" width="65" height="50" as="geometry" />
         </mxCell>
-        <mxCell id="DXyumOJfPZMr4FoaWyzm-216" value="guild logs" style="swimlane;startSize=23;" vertex="1" parent="1">
+        <mxCell id="DXyumOJfPZMr4FoaWyzm-216" value="guild logs" style="swimlane;startSize=23;fillColor=#f5f5f5;fontColor=#333333;strokeColor=#666666;" vertex="1" parent="1">
           <mxGeometry x="1290" y="15" width="200" height="200" as="geometry" />
         </mxCell>
         <mxCell id="DXyumOJfPZMr4FoaWyzm-217" value="timestamp" style="text;html=1;align=left;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="DXyumOJfPZMr4FoaWyzm-216">
