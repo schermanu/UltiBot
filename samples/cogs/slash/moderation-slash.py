@@ -10,7 +10,7 @@ import disnake
 from disnake import ApplicationCommandInteraction, Option, OptionType
 from disnake.ext import commands
 
-from helpers import checks
+from samples.helpers import checks
 
 
 class Moderation(commands.Cog, name="moderation-slash"):

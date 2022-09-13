@@ -12,7 +12,7 @@ import disnake
 from disnake import ApplicationCommandInteraction, Option, OptionType
 from disnake.ext import commands
 
-from helpers import json_manager, checks
+from samples.helpers import checks, json_manager
 
 
 class Owner(commands.Cog, name="owner-slash"):

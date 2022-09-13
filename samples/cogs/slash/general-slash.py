@@ -11,25 +11,25 @@ import random
 
 import aiohttp
 import disnake
+from disnake import ApplicationCommandInteraction, Option, OptionType
 from disnake.ext import commands
-from disnake.ext.commands import Context
 
-from helpers import checks
+from samples.helpers import checks
 
 
-class General(commands.Cog, name="general-normal"):
+class General(commands.Cog, name="general-slash"):
     def __init__(self, bot):
         self.bot = bot
 
-    @commands.command(
+    @commands.slash_command(
         name="botinfo",
         description="Get some useful (or not) information about the bot.",
     )
     @checks.not_blacklisted()
-    async def botinfo(self, context: Context) -> None:
+    async def botinfo(self, interaction: ApplicationCommandInteraction) -> None:
         """
         Get some useful (or not) information about the bot.
-        :param context: The context in which the command has been executed.
+        :param interaction: The application command interaction.
         """
         embed = disnake.Embed(
             description="Used [Krypton's](https://krypton.ninja) template",
@@ -54,21 +54,21 @@ class General(commands.Cog, name="general-normal"):
             inline=False
         )
         embed.set_footer(
-            text=f"Requested by {context.author}"
+            text=f"Requested by {interaction.author}"
         )
-        await context.send(embed=embed)
+        await interaction.send(embed=embed)
 
-    @commands.command(
+    @commands.slash_command(
         name="serverinfo",
         description="Get some useful (or not) information about the server.",
     )
     @checks.not_blacklisted()
-    async def serverinfo(self, context: Context) -> None:
+    async def serverinfo(self, interaction: ApplicationCommandInteraction) -> None:
         """
         Get some useful (or not) information about the server.
-        :param context: The context in which the command has been executed.
+        :param interaction: The application command interaction.
         """
-        roles = [role.name for role in context.guild.roles]
+        roles = [role.name for role in interaction.guild.roles]
         if len(roles) > 50:
             roles = roles[:50]
             roles.append(f">>>> Displaying[50/{len(roles)}] Roles")
@@ -76,59 +76,59 @@ class General(commands.Cog, name="general-normal"):
 
         embed = disnake.Embed(
             title="**Server Name:**",
-            description=f"{context.guild}",
+            description=f"{interaction.guild}",
             color=0x9C84EF
         )
         embed.set_thumbnail(
-            url=context.guild.icon.url
+            url=interaction.guild.icon.url
         )
         embed.add_field(
             name="Server ID",
-            value=context.guild.id
+            value=interaction.guild.id
         )
         embed.add_field(
             name="Member Count",
-            value=context.guild.member_count
+            value=interaction.guild.member_count
         )
         embed.add_field(
             name="Text/Voice Channels",
-            value=f"{len(context.guild.channels)}"
+            value=f"{len(interaction.guild.channels)}"
         )
         embed.add_field(
-            name=f"Roles ({len(context.guild.roles)})",
+            name=f"Roles ({len(interaction.guild.roles)})",
             value=roles
         )
         embed.set_footer(
-            text=f"Created at: {context.guild.created_at}"
+            text=f"Created at: {interaction.guild.created_at}"
         )
-        await context.send(embed=embed)
+        await interaction.send(embed=embed)
 
-    @commands.command(
+    @commands.slash_command(
         name="ping",
         description="Check if the bot is alive.",
     )
     @checks.not_blacklisted()
-    async def ping(self, context: Context) -> None:
+    async def ping(self, interaction: ApplicationCommandInteraction) -> None:
         """
         Check if the bot is alive.
-        :param context: The context in which the command has been executed.
+        :param interaction: The application command interaction.
         """
         embed = disnake.Embed(
             title="🏓 Pong!",
             description=f"The bot latency is {round(self.bot.latency * 1000)}ms.",
             color=0x9C84EF
         )
-        await context.send(embed=embed)
+        await interaction.send(embed=embed)
 
-    @commands.command(
+    @commands.slash_command(
         name="invite",
         description="Get the invite link of the bot to be able to invite it.",
     )
     @checks.not_blacklisted()
-    async def invite(self, context: Context) -> None:
+    async def invite(self, interaction: ApplicationCommandInteraction) -> None:
         """
         Get the invite link of the bot to be able to invite it.
-        :param context: The context in which the command has been executed.
+        :param interaction: The application command interaction.
         """
         embed = disnake.Embed(
             description=f"Invite me by clicking [here](https://discordapp.com/oauth2/authorize?&client_id={self.bot.config['application_id']}&scope=bot+applications.commands&permissions={self.bot.config['permissions']}).",
@@ -136,40 +136,48 @@ class General(commands.Cog, name="general-normal"):
         )
         try:
             # To know what permissions to give to your bot, please see here: https://discordapi.com/permissions.html and remember to not give Administrator permissions.
-            await context.author.send(embed=embed)
-            await context.send("I sent you a private message!")
+            await interaction.author.send(embed=embed)
+            await interaction.send("I sent you a private message!")
         except disnake.Forbidden:
-            await context.send(embed=embed)
+            await interaction.send(embed=embed)
 
-    @commands.command(
+    @commands.slash_command(
         name="server",
         description="Get the invite link of the discord server of the bot for some support.",
     )
     @checks.not_blacklisted()
-    async def server(self, context: Context) -> None:
+    async def server(self, interaction: ApplicationCommandInteraction) -> None:
         """
         Get the invite link of the discord server of the bot for some support.
-        :param context: The context in which the command has been executed.
+        :param interaction: The application command interaction.
         """
         embed = disnake.Embed(
             description=f"Join the support server for the bot by clicking [here](https://discord.gg/mTBrXyWxAF).",
             color=0xD75BF4
         )
         try:
-            await context.author.send(embed=embed)
-            await context.send("I sent you a private message!")
+            await interaction.author.send(embed=embed)
+            await interaction.send("I sent you a private message!")
         except disnake.Forbidden:
-            await context.send(embed=embed)
+            await interaction.send(embed=embed)
 
-    @commands.command(
+    @commands.slash_command(
         name="8ball",
         description="Ask any question to the bot.",
+        options=[
+            Option(
+                name="question",
+                description="The question you want to ask.",
+                type=OptionType.string,
+                required=True
+            )
+        ],
     )
     @checks.not_blacklisted()
-    async def eight_ball(self, context: Context, *, question: str) -> None:
+    async def eight_ball(self, interaction: ApplicationCommandInteraction, question: str) -> None:
         """
         Ask any question to the bot.
-        :param context: The context in which the command has been executed.
+        :param interaction: The application command interaction.
         :param question: The question that should be asked by the user.
         """
         answers = ["It is certain.", "It is decidedly so.", "You may rely on it.", "Without a doubt.",
@@ -185,17 +193,17 @@ class General(commands.Cog, name="general-normal"):
         embed.set_footer(
             text=f"The question was: {question}"
         )
-        await context.send(embed=embed)
+        await interaction.send(embed=embed)
 
-    @commands.command(
+    @commands.slash_command(
         name="bitcoin",
         description="Get the current price of bitcoin.",
     )
     @checks.not_blacklisted()
-    async def bitcoin(self, context: Context) -> None:
+    async def bitcoin(self, interaction: ApplicationCommandInteraction) -> None:
         """
         Get the current price of bitcoin.
-        :param context: The context in which the command has been executed.
+        :param interaction: The application command interaction.
         """
         # This will prevent your bot from stopping everything when doing a web request - see: https://discordpy.readthedocs.io/en/stable/faq.html#how-do-i-make-a-web-request
         async with aiohttp.ClientSession() as session:
@@ -214,7 +222,7 @@ class General(commands.Cog, name="general-normal"):
                         description="There is something wrong with the API, please try again later",
                         color=0xE02B2B
                     )
-                await context.send(embed=embed)
+                await interaction.send(embed=embed)
 
 
 def setup(bot):

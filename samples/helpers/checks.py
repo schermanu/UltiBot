@@ -11,7 +11,7 @@ from typing import TypeVar, Callable
 
 from disnake.ext import commands
 
-from exceptions import *
+from samples.exceptions import *
 
 T = TypeVar("T")
 

@@ -12,7 +12,7 @@ import disnake
 from disnake.ext import commands
 from disnake.ext.commands import Context
 
-from helpers import json_manager, checks
+from samples.helpers import checks, json_manager
 
 
 class Owner(commands.Cog, name="owner-normal"):
@@ -81,6 +81,7 @@ class Owner(commands.Cog, name="owner-normal"):
     @blacklist.command(
         name="add"
     )
+    @checks.not_blacklisted()
     async def blacklist_add(self, context: Context, member: disnake.Member = None):
         """
         Lets you add a user from not being able to use the bot.

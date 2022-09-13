@@ -1,9 +1,17 @@
-{
-  "prefix": "?",
-  "token": "OTcwMzY2MjE4OTExNTA2NDYy.GYMnas.wUBSaEKNwYdllXxnxEmL5efkeVBWriK6x48KlQ",
-  "permissions": "8&scope=bot%20applications.commands",
-  "application_id": "970366218911506462",
-  "owners": [
-    853998598617432064
-  ]
+{ "discord" : {
+    "prefix": "?",
+    "token": "OTcwMzY2MjE4OTExNTA2NDYy.GYMnas.wUBSaEKNwYdllXxnxEmL5efkeVBWriK6x48KlQ",
+    "permissions": "8&scope=bot%20applications.commands",
+    "application_id": "970366218911506462",
+    "owners": [
+      853998598617432064
+    ]
+  },
+  "mySQL":{
+    "DB_HOST": "127.0.0.1",
+    "DB_PORT":3306,
+    "DB_SCHEMA":"ultibot",
+    "DB_USER": "ultibot",
+    "DB_PASSWORD": "/balisto123"
+  }
 }

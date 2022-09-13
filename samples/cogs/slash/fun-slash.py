@@ -13,7 +13,7 @@ import disnake
 from disnake import ApplicationCommandInteraction
 from disnake.ext import commands
 
-from helpers import checks
+from samples.helpers import checks
 
 
 class Choice(disnake.ui.View):

@@ -6,8 +6,8 @@ Here is the list of all the updates that I made on this template.
 
 * Added the `hackban` command
 * Separated slash commands and normal commands so that you remove one of them more easily
-    * Moved normal commands in [`cogs/normal`](cogs/normal)
-    * Moved slash commands in [`cogs/slash`](cogs/slash)
+    * Moved normal commands in [`cogs/normal`](samples/cogs/normal)
+    * Moved slash commands in [`cogs/slash`](samples/cogs/slash)
 
 ### Version 4.0.1
 

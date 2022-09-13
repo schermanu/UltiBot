@@ -9,7 +9,7 @@ Version: 4.1
 from disnake.ext import commands
 from disnake.ext.commands import Context
 
-from helpers import checks
+from samples.helpers import checks
 
 
 # Here we name the cog and create a new class for the cog.
